@@ -1,1 +1,63 @@
 @import "tailwindcss";
+
+html, body {
+  width: 100vw;
+  background-color: #171720;
+  color: hsl(190, 100%, 98%);
+}
+
+.hero-layout {
+  @apply relative z-10 xl:mt-20 mt-32 md:h-dvh h-[80vh] flex xl:items-center items-start justify-center;
+}
+
+.hero-text {
+  @apply flex flex-col justify-center md:text-[60px] text-[30px] font-semibold relative z-10 pointer-events-none;
+  img {
+    @apply size-8 md:size-10 object-contain;
+  }
+  .slide {
+    @apply absolute pt-0 px-2 md:px-5 py-[30px] h-[48px] md:h-[78px] md:translate-y-1 translate-y-0 overflow-hidden;
+  }
+}
+
+.slide {
+  display: inline-block;
+  flex-direction: column;
+  transition: all cubic-bezier(0.71, 0.03, 0.34, 1);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  animation: wordSlider 21s infinite cubic-bezier(0.9, 0.01, 0.3, 0.99);
+}
+
+@keyframes wordSlider {
+  0% {
+    transform: translateY(0.5%);
+  }
+  11.11% {
+    transform: translateY(-11.11%);
+  }
+  22.22% {
+    transform: translateY(-22.22%);
+  }
+  33.33% {
+    transform: translateY(-33.33%);
+  }
+  44.44% {
+    transform: translateY(-44.44%);
+  }
+  55.55% {
+    transform: translateY(-55.55%);
+  }
+  66.66% {
+    transform: translateY(-66.66%);
+  }
+  77.77% {
+    transform: translateY(-77.77%);
+  }
+  88.88% {
+    transform: translateY(-88.88%);
+  }
+}

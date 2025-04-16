@@ -1,9 +1,11 @@
+import Hero from "./sections/Hero"
+
 
 function App() {
 
   return (
     <>
-      <p>Hello World!</p>
+      <Hero />
     </>
   )
 }
