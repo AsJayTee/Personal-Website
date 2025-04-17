@@ -7,6 +7,7 @@ html, body {
   color: hsl(190, 100%, 98%);
   scroll-behavior: smooth;
   font-family: "Mona Sans", sans-serif;
+  overflow-x: hidden;
 }
 
 .hero-layout {
@@ -24,7 +25,7 @@ html, body {
 }
 
 .hero-3d-layout {
-  @apply xl:w-[70%] w-full h-full min-h-[50vh] absolute xl:-top-20 top-24 xl:-right-20 right-0;
+  @apply xl:w-[70%] w-full h-[115%] min-h-[50vh] absolute xl:-top-20 top-24 xl:-right-20 right-0;
 }
 
 .slide {
@@ -69,7 +70,6 @@ html, body {
   }
 }
 
-/* Navbar specific styles */
 .navbar {
   position: fixed;
   width: 100%;
@@ -203,7 +203,6 @@ html, body {
   color: white;
 }
 
-/* Mobile menu */
 .navbar .fixed {
   position: fixed;
   inset: 0;

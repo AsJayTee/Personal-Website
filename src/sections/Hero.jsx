@@ -38,7 +38,7 @@ const Hero = () => {
               <h1>and a Love for Learning</h1>
             </div>
             <p className="hero-intro text-[#d9ecff] md:text-xl relative z-10 pointer-events-none">
-              Hi! I'm Jin Thau. A Data Science & Computer Science Undergrad @ NUS
+              Hi, I'm Jin Thau. A Data Science & Computer Science Undergrad @ NUS
             </p>
           </div> 
         </header>

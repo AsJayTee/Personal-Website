@@ -107,7 +107,7 @@ const HeroExperience = () => {
       </div>
       
       {canvasVisible && (
-        <Canvas camera={{ position: [0, -4, 15], fov: 45 }}>
+        <Canvas camera={{ position: [0, -3.5, 16.5], fov: 50 }}>
           <LoadingManager />
           
           <ambientLight intensity={0.2} color="#1a1a40" />
