@@ -9,7 +9,7 @@ const HeroWordsSlider = () => {
             key={index}
             className="flex items-center md:gap-3 gap-1 pb-2"
           >
-            <div className="xl:w-12 xl:h-12 md:w-7 md:h-10 w-7 h-7 rounded-full bg-white flex items-center justify-center">
+            <div className="xl:w-12 xl:h-12 md:w-7 md:h-10 w-7 h-7 rounded-full bg-[#d9ecff] flex items-center justify-center">
               <img
                 src={word.imgPath}
                 alt="person"

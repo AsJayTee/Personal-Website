@@ -113,7 +113,7 @@ const HeroExperience = () => {
           <ambientLight intensity={0.2} color="#1a1a40" />
           <OrbitControls 
             enablePan={false} 
-            enableZoom={true} 
+            enableZoom={false} 
             minPolarAngle={Math.PI / 5} 
             maxPolarAngle={Math.PI / 2} 
           />
