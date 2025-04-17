@@ -35,7 +35,6 @@ const PointingSpotLight = ({ position, targetPosition, color, showHelper=true, .
 
 const HeroLights = () => (
   <>
-    {/* lamp's light */}
     <PointingSpotLight
       position={[0, 3, 1.8]}
       targetPosition={[-1, -1.2, 1.3]} 
@@ -63,7 +62,6 @@ const HeroLights = () => (
       color="#43ccf7"
       showHelper={false}
     />
-    {/* purplish side fill */}
     <PointingSpotLight
       position={[-3, 8, 5]}
       targetPosition={[2, 0.2, 1]} 
@@ -73,7 +71,6 @@ const HeroLights = () => (
       color="#9d4edd"
       showHelper={false}
     />
-    {/* area light for soft moody fill */}
     <primitive
       object={new THREE.RectAreaLight("#a259ff", 8, 3, 2)}
       position={[1, 3, 4]}
@@ -81,17 +78,32 @@ const HeroLights = () => (
       intensity={5}
     />
     <PointingSpotLight
-      position={[-3, 0, 5]}
-      targetPosition={[2, 0.2, 1]} 
-      angle={0.6}
+      position={[4, 1.6, 2]}
+      targetPosition={[4, 0.2, 2]} 
+      angle={0.9}
+      penumbra={1}
+      intensity={30}
+      color="#ffff80"
+      showHelper={false}
+    />
+    <PointingSpotLight
+      position={[0, 1, 8]}
+      targetPosition={[2, 1, 2]} 
+      angle={0.2}
       penumbra={1}
       intensity={100}
-      color="white"
-      showHelper={true}
+      color="#7209b7"
+      showHelper={false}
     />
-    {/* subtle point light for atmospheric tone */}
-    {/* <pointLight position={[0, 1, 0]} intensity={10} color="#7209b7" />
-    <pointLight position={[1, 2, -2]} intensity={10} color="#0d00a4" /> */}
+    <PointingSpotLight
+      position={[0, 1, 8]}
+      targetPosition={[1.2, 0, 2]} 
+      angle={0.2}
+      penumbra={1}
+      intensity={100}
+      color="#0d00a4"
+      showHelper={false}
+    />
   </>
 );
 

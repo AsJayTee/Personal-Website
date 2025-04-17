@@ -7,29 +7,23 @@ Source: https://sketchfab.com/3d-models/dae-simple-scene-unlucky-library-7f09861
 Title: DAE Simple Scene - Unlucky Library
 */
 
-import React from 'react'
+import React, { useRef, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from "three";
 import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
-import { useRef } from 'react';
 
 export function Model(props) {
-  const glowRef = useRef();
+  const lampGlowRef = useRef();
   const { nodes, materials } = useGLTF('/models/Library.glb')
-  const glowMaterial = new THREE.MeshStandardMaterial({
-    color: "#fff",
-  });
+  const glowMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: "#ffff80", 
+    emissive: "#ffff80", 
+    emissiveIntensity: 2.0, 
+    toneMapped: false 
+  }), []);
   return (
     <group {...props} dispose={null}>
-      <EffectComposer>
-        <SelectiveBloom
-          intensity={1.5}
-          luminanceThreshold={0.2} 
-          luminanceSmoothing={0.9} 
-          blendFunction={BlendFunction.ADD} 
-        />
-      </EffectComposer>
       <group scale={0.01}>
         <group rotation={[-Math.PI / 2, 0, 0]} scale={100}>
           <mesh geometry={nodes.SM_FloorBoard_M_Wood_5_0.geometry} material={materials.M_Wood_5} />
@@ -156,9 +150,19 @@ export function Model(props) {
           <mesh geometry={nodes.SM_Wall_Book_Paper_M_Paper_Wall_0.geometry} material={materials.M_Paper_Wall} />
           <mesh geometry={nodes.SM_Wall_Lamp_M_Book_Cover_0.geometry} material={materials.M_Book_Cover} />
           <mesh geometry={nodes.SM_Wall_Lamp_M_Lamp_Rim_0.geometry} material={materials.M_Lamp_Rim} />
-          <mesh geometry={nodes.SM_Wall_Lamp_M_Stars_0.geometry} material={glowMaterial} ref={glowRef}/>
+          <mesh geometry={nodes.SM_Wall_Lamp_M_Stars_0.geometry} material={glowMaterial} ref={lampGlowRef}/>
         </group>
       </group>
+      <EffectComposer>
+        <SelectiveBloom 
+          lights={[]} 
+          selection={lampGlowRef} 
+          intensity={0.5} 
+          luminanceThreshold={0.1} 
+          luminanceSmoothing={0.9}
+          blendFunction={BlendFunction.ADD}
+        />
+      </EffectComposer>
     </group>
   )
 }
