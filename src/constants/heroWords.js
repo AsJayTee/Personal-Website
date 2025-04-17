@@ -7,5 +7,5 @@ export const words = [
   { text: "Data Pipelines", imgPath: "/images/hero/data_pipelines.png" },
   { text: "NLP", imgPath: "/images/hero/nlp.png" },
   { text: "Generative AI", imgPath: "/images/hero/generative_ai.png" },
-  { text: "Not Enough Sleep", imgPath: "/images/hero/net_enough_sleep.png" }
+  { text: "Not Enough Sleep", imgPath: "/images/hero/not_enough_sleep.png" }
 ];
