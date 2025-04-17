@@ -36,7 +36,7 @@ const PointingSpotLight = ({ position, targetPosition, color, showHelper=true, .
 const HeroLights = () => (
   <>
     <PointingSpotLight
-      position={[0, 3, 1.8]}
+      position={[-2, 3, 3]}
       targetPosition={[-1, -1.2, 1.3]} 
       angle={0.6}
       penumbra={0.7}
