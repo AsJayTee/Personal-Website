@@ -10,6 +10,18 @@ const Hero = () => {
       { y: 50, opacity: 0 },
       { y: 0, opacity: 1, stagger: 0.2, duration: 1, ease: "power2.inOut" }
     );
+
+    gsap.fromTo(
+      ".hero-intro",
+      { y: 20, opacity: 0 },
+      { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.8, 
+        ease: "power2.out",
+        delay: 1
+      }
+    );
   });
 
   return(
@@ -25,7 +37,7 @@ const Hero = () => {
               </h1>
               <h1>and a Love for Learning</h1>
             </div>
-            <p className="text-white-50 md:text-xl relative z-10 pointer-events-none">
+            <p className="hero-intro text-white-50 md:text-xl relative z-10 pointer-events-none">
               Hi! I'm Jin Thau. A Data Science & Computer Science Undergrad @ NUS
             </p>
           </div> 
