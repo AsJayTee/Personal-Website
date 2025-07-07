@@ -185,7 +185,10 @@ const HeroExperience = () => {
           onTouchCancel={handleInteractionEnd}
         >
           <Canvas 
-            camera={{ position: [0, -3.5, 16.5], fov: 50 }}
+            camera={{ 
+              position: [0, -3.5, 16.5], 
+              fov: isMobile ? 50 : 57
+            }}
             gl={{ 
               antialias: true,
               alpha: true,
@@ -228,25 +231,6 @@ const HeroExperience = () => {
               <SceneContent isMobile={isMobile} />
             </Suspense>
           </Canvas>
-        </div>
-      )}
-      
-      {/* Interaction hint */}
-      {!isLoading && (
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '20px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            fontSize: '12px',
-            color: 'rgba(217, 236, 255, 0.5)',
-            pointerEvents: 'none',
-            opacity: isInteracting ? 0 : 1,
-            transition: 'opacity 0.3s ease'
-          }}
-        >
-          {isMobile ? 'Swipe to rotate' : 'Click and drag to rotate'}
         </div>
       )}
     </div>
