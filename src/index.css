@@ -344,3 +344,10 @@ section {
     scroll-behavior: smooth;
   }
 }
+
+@media (max-width: 768px) {
+  .hero-3d-layout > div {
+    overflow: hidden;
+    clip-path: inset(20% 0 0 0); /* Crops 20% from the top */
+  }
+}

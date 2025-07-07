@@ -42,7 +42,7 @@ const SceneContent = memo(({ isMobile }) => {
       <Particles count={100} />
       <group
         scale={isMobile ? 0.55 : 0.7}
-        position={[0, -3.5, 0]}
+        position={isMobile ? [-0.5, -3.5, 0] : [0, -3.5, 0]}
         rotation={[0, Math.PI / 4, 0]}
       >
         <Model />
