@@ -348,14 +348,14 @@ section {
 @media (max-width: 768px) {
   .hero-3d-layout > div {
     overflow: hidden;
-    clip-path: inset(20% 0 0 0); /* Crops 20% from the top */
+    clip-path: inset(20% 0 11% 0); /* Crops 20% from the top */
   }
 }
 
 @media (min-width: 769px) {
   .hero-3d-layout > div {
     overflow: hidden;
-    clip-path: inset(0 0 0 15%); /* Crops 20% from the left */
+    clip-path: inset(0 0 0 15%); /* Crops 15% from the left */
   }
 }
 

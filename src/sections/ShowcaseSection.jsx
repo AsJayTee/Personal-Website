@@ -43,7 +43,7 @@ const ShowcaseSection = () => {
   }, []);
 
   return (
-    <div>
+    <div className="mt-0 max-md:-mt-25">
       <TitleHeader title={"My Projects"} sub={"Things I Build 🔧"} />
       <section id="projects" className="app-showcase" ref={sectionRef}>
         <div className="w-full">
