@@ -10,7 +10,7 @@ Title: DAE Simple Scene - Unlucky Library
 import React, { useRef, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from "three";
-import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 
 export function Model(props) {
@@ -154,8 +154,7 @@ export function Model(props) {
         </group>
       </group>
       <EffectComposer>
-        <SelectiveBloom 
-          lights={[]} 
+        <Bloom 
           selection={lampGlowRef} 
           intensity={0.5} 
           luminanceThreshold={0.1} 
