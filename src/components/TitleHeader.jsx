@@ -24,7 +24,7 @@ const TitleHeader = ({ title, sub }) => {
         trigger: containerRef.current,
         start: "top bottom-=100",
         end: "bottom top",
-        toggleActions: "play none none reverse"
+        toggleActions: "play none none"
       }
     });
 
