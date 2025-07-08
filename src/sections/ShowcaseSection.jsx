@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import TitleHeader from "../components/TitleHeader";
+import FancyLabel from "../components/FancyLabel";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,6 +51,7 @@ const ShowcaseSection = () => {
             {/* LEFT */}
             <div className="first-project-wrapper" ref={project1Ref}>
               <div className="image-wrapper">
+                <FancyLabel text="Professional Collaboration" position="top-right" />
                 <img src="images\showcase\pb_chatbot.png" alt="Psychology Blossom Chatbot" />
               </div>
               <div className="text-content">
