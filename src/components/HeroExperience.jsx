@@ -38,7 +38,7 @@ const SceneContent = memo(({ isMobile }) => {
   return (
     <>
       <ambientLight intensity={0.2} color="#1a1a40" />
-      <HeroLights />
+      <HeroLights isMobile = {isMobile} />
       <Particles count={100} />
       <group
         scale={isMobile ? 0.55 : 0.7}
