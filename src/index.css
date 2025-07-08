@@ -406,3 +406,7 @@ section {
     }
   }
 }
+
+.hero-badge {
+  @apply bg-[#474747] py-2 px-4 rounded-full w-fit text-sm md:text-base text-nowrap;
+}
