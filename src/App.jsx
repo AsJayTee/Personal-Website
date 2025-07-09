@@ -1,6 +1,7 @@
 import Hero from "./sections/Hero"
 import Navbar from "./sections/Navbar"
 import ShowcaseSection from "./sections/ShowcaseSection"
+import ExperienceSection from "./sections/ExperienceSection"
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Navbar />
       <Hero />
       <ShowcaseSection />
+      <ExperienceSection />
     </>
   )
 }
