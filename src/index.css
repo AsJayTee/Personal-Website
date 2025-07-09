@@ -110,6 +110,7 @@ body {
 }
 
 /* Navbar styles */
+/* Remove any overflow-y: auto from navbar */
 .navbar {
   position: fixed;
   width: 100%;
@@ -122,6 +123,7 @@ body {
   z-index: 100;
   transition: all 0.3s ease-in-out;
   pointer-events: auto;
+  overflow: visible; /* Navbar should never create scrollbars */
 }
 
 @media (min-width: 768px) {
@@ -371,6 +373,7 @@ section {
 
     .image-wrapper {
       @apply xl:h-[70vh] md:h-[50vh] h-96 relative;
+      max-height: 70vh;
 
       img {
         @apply w-full h-full object-cover rounded-xl absolute inset-0;
