@@ -44,7 +44,7 @@ const ShowcaseSection = () => {
 
   return (
     <div className="mt-0 max-md:-mt-25">
-      <TitleHeader title={"My Projects"} sub={"Things I Build 🔧"} />
+      <TitleHeader title={"My Projects"} sub={"Things I Built 🔧"} />
       <section id="projects" className="app-showcase" ref={sectionRef}>
         <div className="w-full">
           <div className="showcaselayout">
