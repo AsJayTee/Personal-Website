@@ -87,7 +87,7 @@ const ShowcaseSection = () => {
                   <img src="images\showcase\fraud_analysis.png" alt="ROC Curve" />
                 </div>
                 <h2>
-                  Fraud in Electricity and Gas Consumption
+                  Fraud Detection in Electricity and Gas Consumption
                 </h2>
               </div>
             </div>
