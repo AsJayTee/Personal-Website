@@ -413,3 +413,15 @@ section {
 .hero-badge {
   @apply bg-[#474747] py-2 px-4 rounded-full w-fit text-sm md:text-base text-nowrap;
 }
+
+.card-border {
+  @apply border border-[#333333] bg-[#1a1a1a];
+}
+
+.grid-3-cols {
+  @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6;
+}
+
+.padding-x-lg {
+  @apply px-5 md:px-20;
+}
