@@ -13,33 +13,88 @@ const ShowcaseSection = () => {
   const project2Ref = useRef(null);
   const project3Ref = useRef(null);
 
-  useGSAP(() => {
+useGSAP(() => {
     const projects = [project1Ref.current, project2Ref.current, project3Ref.current];
-    projects.forEach((card, index) => {
-      gsap.fromTo(
-        card,
-        {
-          y: 50, 
-          opacity: 0
-        },
-        {
-          y: 0, 
-          opacity: 1, 
-          duration: 1, 
-          delay: 0.3 * (index + 1),
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom-=30"
-          }
+    const isDesktop = window.innerWidth >= 1024; // xl breakpoint
+    
+    if (isDesktop) {
+      // Set initial state for projects 2 and 3 to prevent flash
+      gsap.set([projects[1], projects[2]], {
+        y: 50,
+        opacity: 0
+      });
+      // Desktop: All projects animate consecutively after first project triggers
+      projects.forEach((card, index) => {
+        if (index === 0) {
+          // First project with scroll trigger
+          gsap.fromTo(
+            card,
+            {
+              y: 50, 
+              opacity: 0
+            },
+            {
+              y: 0, 
+              opacity: 1, 
+              duration: 1, 
+              delay: 0.3,
+              scrollTrigger: {
+                trigger: card,
+                start: "top bottom-=100",
+                once: true, // Only trigger once
+                onEnter: () => {
+                  // Trigger animations for other projects
+                  projects.slice(1).forEach((otherCard, otherIndex) => {
+                    gsap.fromTo(
+                      otherCard,
+                      {
+                        y: 50, 
+                        opacity: 0
+                      },
+                      {
+                        y: 0, 
+                        opacity: 1, 
+                        duration: 1, 
+                        delay: 0.3 * (otherIndex + 2) // Staggered delay
+                      }
+                    );
+                  });
+                }
+              }
+            }
+          );
         }
-      )
+        // Other projects are animated via the onEnter callback above
+      });
+    } else {
+      // Mobile: Keep existing behavior with individual scroll triggers
+      projects.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          {
+            y: 50, 
+            opacity: 0
+          },
+          {
+            y: 0, 
+            opacity: 1, 
+            duration: 1, 
+            delay: 0.3 * (index + 1),
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom-=30",
+              once: true // Only trigger once
+            }
+          }
+        );
+      });
     }
-    )
+    
     gsap.fromTo(
       sectionRef.current, 
       { opacity : 0 }, 
       { opacity : 1, duration : 1.5 }
-    )
+    );
   }, []);
 
   return (
