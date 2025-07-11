@@ -16,9 +16,9 @@ const ExperienceSection = () => {
             { experiences.map((card, index) => (
               <div key={card.title} className="exp-card-wrapper text-white"> 
                 <div>
-                  <GlowCard>
+                  <GlowCard index={index}>
                     <div>
-                      <img src={card.imgPath}/>
+                      <img src={card.imgPath} alt={card.companyName} />
                     </div>
                   </GlowCard>
                 </div>
