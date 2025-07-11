@@ -1,6 +1,7 @@
 import React from 'react'
 import TitleHeader from '../components/TitleHeader'
 import { experiences } from '../constants/experiences'
+import GlowCard from '../components/Glowcard'
 
 const ExperienceSection = () => {
   return(
@@ -14,7 +15,13 @@ const ExperienceSection = () => {
           <div className="relative z-50 xl:space-y-32 space-y-10">
             { experiences.map((card, index) => (
               <div key={card.title} className="exp-card-wrapper text-white"> 
-                {card.title}
+                <div>
+                  <GlowCard>
+                    <div>
+                      <img src={card.imgPath}/>
+                    </div>
+                  </GlowCard>
+                </div>
               </div>
             )) }
           </div>
