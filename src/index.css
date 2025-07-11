@@ -110,7 +110,6 @@ body {
 }
 
 /* Navbar styles */
-/* Remove any overflow-y: auto from navbar */
 .navbar {
   position: fixed;
   width: 100%;
@@ -123,7 +122,7 @@ body {
   z-index: 100;
   transition: all 0.3s ease-in-out;
   pointer-events: auto;
-  overflow: visible; /* Navbar should never create scrollbars */
+  overflow: visible;
 }
 
 @media (min-width: 768px) {
@@ -478,4 +477,191 @@ section {
 
 .card:hover::before {
   opacity: 1;
+}
+
+/* ===== TIMELINE STYLES ===== */
+
+/* Timeline Container and Layout */
+.timeline-container {
+  @apply relative w-full;
+}
+
+.timeline-wrapper {
+  @apply absolute top-0 left-1/2 transform -translate-x-1/2 flex justify-center items-start;
+  z-index: 30;
+  height: 100%;
+}
+
+@media (min-width: 1024px) {
+  .timeline-wrapper {
+    @apply left-1/3;
+  }
+}
+
+.timeline-line {
+  @apply relative w-1;
+  height: 100%;
+  background: linear-gradient(
+    0deg,
+    rgba(23, 23, 32, 0) 0%,
+    #62e0ff 20%,
+    rgba(23, 23, 32, 0) 100%
+  );
+  transform-origin: top;
+}
+
+.timeline-node {
+  @apply absolute flex items-center justify-center rounded-full border-4 bg-[#171720] z-40;
+  width: 80px;
+  height: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: var(--node-color, #ffffff);
+  box-shadow: 0 0 20px var(--node-color, #ffffff);
+  transition: all 0.3s ease;
+  top: 0; /* Will be dynamically positioned */
+}
+
+.timeline-node:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .timeline-node {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.timeline-node img {
+  @apply w-12 h-12 object-contain rounded-full;
+}
+
+@media (max-width: 768px) {
+  .timeline-node img {
+    @apply w-8 h-8;
+  }
+}
+
+/* Experience Content Layout */
+.experience-content {
+  @apply relative z-20;
+}
+
+.experience-card {
+  @apply relative mb-20 lg:mb-32;
+}
+
+.experience-card-content {
+  @apply bg-[#1a1a1a] border border-[#333333] rounded-xl p-6 lg:p-8;
+  margin-left: 50%;
+  margin-right: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .experience-card-content {
+    margin-left: 0;
+    margin-top: 2rem;
+  }
+}
+
+.experience-header {
+  @apply flex items-start justify-between mb-4;
+}
+
+.company-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  background: linear-gradient(135deg, var(--theme-primary, #FF6B35), var(--theme-secondary, #FF8F65));
+  color: white;
+}
+
+.experience-title {
+  @apply text-2xl lg:text-3xl font-bold text-white mb-2;
+}
+
+.experience-date {
+  @apply text-[#d9ecff] text-lg mb-6;
+}
+
+.responsibilities-section {
+  @apply mb-6;
+}
+
+.responsibilities-title {
+  @apply text-[#d9ecff] text-lg font-semibold mb-3;
+}
+
+.responsibilities-list {
+  @apply space-y-2;
+}
+
+.responsibility-item {
+  @apply flex items-start text-[#d9ecff];
+}
+
+.responsibility-bullet {
+  @apply w-1.5 h-1.5 rounded-full mt-2 mr-3 flex-shrink-0;
+  background-color: var(--theme-primary, #FF6B35);
+}
+
+.achievements-section {
+  @apply mt-6 pt-6 border-t border-[#333333];
+}
+
+.achievements-title {
+  @apply text-[#d9ecff] text-lg font-semibold mb-3;
+}
+
+.achievements-list {
+  @apply space-y-2;
+}
+
+.achievement-item {
+  @apply flex items-start text-[#d9ecff];
+}
+
+.achievement-icon {
+  @apply w-5 h-5 mr-3 mt-0.5 flex-shrink-0;
+  color: var(--theme-primary, #FF6B35);
+}
+
+/* Animation Classes */
+.timeline-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.timeline-slide-left {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.timeline-slide-right {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .timeline-wrapper {
+    @apply left-8;
+  }
+  
+  .experience-card-content {
+    @apply ml-20;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-wrapper {
+    @apply left-6;
+  }
+  
+  .experience-card-content {
+    @apply ml-16 mr-4;
+  }
+  
+  .timeline-line {
+    @apply w-0.5;
+  }
 }
