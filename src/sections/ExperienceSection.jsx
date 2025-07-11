@@ -47,6 +47,28 @@ const ExperienceSection = () => {
       });
     };
 
+    // Calculate when each node should appear based on its position relative to timeline
+    const calculateNodeThresholds = () => {
+      const timelineWrapper = timelineRef.current;
+      if (!timelineWrapper) return [];
+      
+      const wrapperHeight = timelineWrapper.offsetHeight;
+      const thresholds = [];
+      
+      experiences.forEach((_, index) => {
+        const nodeEl = nodeRefs.current[index];
+        if (nodeEl && wrapperHeight > 0) {
+          const nodeTop = parseFloat(nodeEl.style.top || '0');
+          const threshold = nodeTop / wrapperHeight;
+          thresholds.push(Math.max(0, Math.min(1, threshold)));
+        } else {
+          thresholds.push(0);
+        }
+      });
+      
+      return thresholds;
+    };
+
     // Set initial states
     gsap.set(experienceRefs.current, {
       opacity: 0,
@@ -95,7 +117,7 @@ const ExperienceSection = () => {
       } : null;
     };
 
-    // Timeline line animation with dynamic color
+    // Timeline line animation with dynamic color AND node animations
     ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top center",
@@ -108,6 +130,67 @@ const ExperienceSection = () => {
           scaleY: progress,
           duration: 0.3,
           ease: "power2.out"
+        });
+
+        // Calculate node thresholds and animate nodes AND cards based on line progress
+        const thresholds = calculateNodeThresholds();
+        
+        experiences.forEach((exp, index) => {
+          const nodeEl = nodeRefs.current[index];
+          const experienceEl = experienceRefs.current[index];
+          const threshold = thresholds[index];
+          
+          if (nodeEl && experienceEl && threshold !== undefined) {
+            const isNodeAnimated = nodeEl.hasAttribute('data-animated');
+            const isCardAnimated = experienceEl.hasAttribute('data-animated');
+            
+            if (progress >= threshold && !isNodeAnimated) {
+              // Mark as animated immediately to prevent duplicate triggers
+              nodeEl.setAttribute('data-animated', 'true');
+              experienceEl.setAttribute('data-animated', 'true');
+              
+              // Node and card appear at EXACTLY the same time with matching easing
+              gsap.to(nodeEl, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out", // Changed to match card easing
+                overwrite: true // Prevent animation conflicts
+              });
+              nodeEl.style.boxShadow = `0 0 30px ${exp.themeColor}, 0 0 60px ${exp.themeColor}40`;
+              
+              gsap.to(experienceEl, {
+                opacity: 1,
+                x: 0,
+                duration: 0.6, // Matched duration to node
+                ease: "power2.out",
+                overwrite: true // Prevent animation conflicts
+              });
+              
+            } else if (progress < threshold && isNodeAnimated) {
+              // Mark as not animated immediately
+              nodeEl.removeAttribute('data-animated');
+              experienceEl.removeAttribute('data-animated');
+              
+              // Both disappear when line retreats
+              gsap.to(nodeEl, {
+                scale: 0,
+                opacity: 0,
+                duration: 0.3,
+                ease: "power2.in",
+                overwrite: true
+              });
+              nodeEl.style.boxShadow = `0 0 20px ${exp.themeColor}`;
+              
+              gsap.to(experienceEl, {
+                opacity: 0,
+                x: 100,
+                duration: 0.3, // Matched duration to node
+                ease: "power2.in",
+                overwrite: true
+              });
+            }
+          }
         });
 
         // Calculate current color based on progress and node positions
@@ -162,73 +245,12 @@ const ExperienceSection = () => {
       }
     });
 
-    // Animate each experience card and node
-    experiences.forEach((_, index) => {
-      const experienceEl = experienceRefs.current[index];
-      const nodeEl = nodeRefs.current[index];
-
-      if (experienceEl && nodeEl) {
-        // Node animation with dynamic glow
-        ScrollTrigger.create({
-          trigger: experienceEl,
-          start: "top bottom+=100", // Appear slightly before the cards
-          onEnter: () => {
-            updateNodePositions(); // Ensure correct positioning
-            gsap.to(nodeEl, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.6,
-              ease: "back.out(1.7)"
-            });
-            
-            // Add active glow effect
-            nodeEl.style.boxShadow = `0 0 30px ${experiences[index].themeColor}, 0 0 60px ${experiences[index].themeColor}40`;
-          },
-          onLeaveBack: () => {
-            gsap.to(nodeEl, {
-              scale: 0,
-              opacity: 0,
-              duration: 0.3,
-              ease: "power2.in"
-            });
-            
-            // Remove glow effect
-            nodeEl.style.boxShadow = `0 0 20px ${experiences[index].themeColor}`;
-          }
-        });
-
-        // Experience card animation
-        ScrollTrigger.create({
-          trigger: experienceEl,
-          start: "top bottom-=100",
-          onEnter: () => {
-            gsap.to(experienceEl, {
-              opacity: 1,
-              x: 0,
-              duration: 0.8,
-              ease: "power2.out",
-              delay: 0.2
-            });
-          },
-          onLeaveBack: () => {
-            gsap.to(experienceEl, {
-              opacity: 0,
-              x: 100,
-              duration: 0.4,
-              ease: "power2.in"
-            });
-          }
-        });
-      }
-    });
-
     // Cleanup
     return () => {
       clearTimeout(positionTimer);
       window.removeEventListener('resize', handleResize);
       ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === sectionRef.current || 
-            experienceRefs.current.includes(trigger.trigger)) {
+        if (trigger.trigger === sectionRef.current) {
           trigger.kill();
         }
       });
@@ -294,7 +316,7 @@ const ExperienceSection = () => {
               >
                 <div 
                   ref={el => cardRefs.current[index] = el}
-                  className="experience-card-content"
+                  className="experience-card-content lg:ml-8"
                   style={{
                     '--theme-primary': exp.themeColor,
                     '--theme-secondary': exp.secondaryColor
