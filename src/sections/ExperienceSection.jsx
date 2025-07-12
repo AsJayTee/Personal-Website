@@ -338,7 +338,7 @@ const ExperienceSection = () => {
       ref={sectionRef}
       className="w-full md:mt-10 mt-10 px-5 md:px-20 py-10 md:py-20"
     >
-      <div className="w-full overflow-hidden">
+      <div className="w-full">
         <TitleHeader
           title={"Professional Work Experience"}
           sub={"Things I did 💼"}

@@ -483,7 +483,7 @@ section {
 
 /* Timeline Container and Layout */
 .timeline-container {
-  @apply relative w-full;
+  @apply relative w-full max-w-7xl mx-auto;
 }
 
 .timeline-wrapper {
