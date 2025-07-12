@@ -142,7 +142,7 @@ const HeroExperience = () => {
           top: 0,
           left: 0,
           right: 0,
-          bottom: '5%',
+          bottom: '15%',
           backgroundColor: '#171720',
           display: 'flex',
           justifyContent: 'center',
