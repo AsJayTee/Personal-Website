@@ -1,23 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { navLinks } from "../constants/navLinks";
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
+  // Initialize scrolled state based on current scroll position
+  const [scrolled, setScrolled] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.scrollY > 10;
+    }
+    return false;
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [enableTransitions, setEnableTransitions] = useState(false);
+  
+  // Use useLayoutEffect to run before paint
+  useLayoutEffect(() => {
+    // Set initial scroll state immediately
+    const isScrolled = window.scrollY > 10;
+    setScrolled(isScrolled);
+    
+    // Enable transitions after a short delay
+    const timer = setTimeout(() => {
+      setEnableTransitions(true);
+    }, 150);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
       setScrolled(isScrolled);
+      
+      // Enable transitions on first scroll if not already enabled
+      if (!enableTransitions) {
+        setEnableTransitions(true);
+      }
     };
     
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [enableTransitions]);
   
   return (
-    <header className={`navbar ${scrolled ? "scrolled" : "not-scrolled"}`}>
+    <header 
+      className={`navbar ${scrolled ? "scrolled" : "not-scrolled"}`}
+      style={{
+        transition: enableTransitions ? 'all 0.3s ease-in-out' : 'none'
+      }}
+    >
       <div className="inner">
         <a href="#hero" className="logo">
           Siah Jin Thau
