@@ -127,8 +127,7 @@ useGSAP(() => {
                 </p>
               </div>
             </div>
-            {/* RIGHT */}
-            <div className="project-list-wrapper overflow-hidden">
+            <div className="project-list-wrapper">
               <div className="project" ref={project2Ref}>
                 <div className="image-wrapper bg-[#dbffdc]">
                   <img src="images\showcase\3d_ai_avatar.png" alt="3D Avatar Waving" />
