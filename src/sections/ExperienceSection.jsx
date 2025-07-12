@@ -117,7 +117,87 @@ const ExperienceSection = () => {
       } : null;
     };
 
-    // Timeline line animation with dynamic color AND node animations
+    // Global animation queue system
+    const animationQueue = {
+      isProcessing: false,
+      queue: [],
+      currentSequence: null,
+      
+      // Add animation to queue
+      enqueue(animationData) {
+        // Remove duplicates for the same index
+        this.queue = this.queue.filter(item => item.index !== animationData.index);
+        this.queue.push(animationData);
+        this.processQueue();
+      },
+      
+      // Clear queue (for reverse scroll)
+      clear() {
+        this.queue = [];
+        if (this.currentSequence) {
+          this.currentSequence.kill();
+          this.currentSequence = null;
+        }
+        this.isProcessing = false;
+      },
+      
+      // Process animations sequentially
+      processQueue() {
+        if (this.isProcessing || this.queue.length === 0) return;
+        
+        this.isProcessing = true;
+        const nextAnimation = this.queue.shift();
+        
+        this.executeSequence(nextAnimation).then(() => {
+          this.isProcessing = false;
+          // Process next in queue
+          if (this.queue.length > 0) {
+            this.processQueue();
+          }
+        });
+      },
+      
+      // Execute a single node->card sequence
+      executeSequence(animData) {
+        return new Promise((resolve) => {
+          const { index, nodeEl, experienceEl, exp } = animData;
+          
+          // Create a timeline for this sequence
+          const sequenceTimeline = gsap.timeline({
+            onComplete: resolve
+          });
+          
+          this.currentSequence = sequenceTimeline;
+          
+          // Mark elements as animated
+          nodeEl.setAttribute('data-animated', 'true');
+          
+          // Node appears first
+          sequenceTimeline.to(nodeEl, {
+            scale: 1,
+            opacity: 1,
+            duration: 0.6,
+            ease: "power2.out",
+            onComplete: () => {
+              nodeEl.style.boxShadow = `0 0 30px ${exp.themeColor}, 0 0 60px ${exp.themeColor}40`;
+            }
+          });
+          
+          // Card appears after node completes (sequential, not overlapping)
+          sequenceTimeline.to(experienceEl, {
+            opacity: 1,
+            x: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            onStart: () => {
+              experienceEl.setAttribute('data-animated', 'true');
+            }
+          }, "+=0.3"); // 0.3s gap between node completion and card start
+        });
+      }
+    };
+
+    // Timeline line animation with sequential queue system
     ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top center",
@@ -132,8 +212,12 @@ const ExperienceSection = () => {
           ease: "power2.out"
         });
 
-        // Calculate node thresholds and animate nodes AND cards based on line progress
+        // Calculate node thresholds and queue animations
         const thresholds = calculateNodeThresholds();
+        
+        // Collect all nodes that should be animated
+        const shouldAnimate = [];
+        const shouldHide = [];
         
         experiences.forEach((exp, index) => {
           const nodeEl = nodeRefs.current[index];
@@ -142,56 +226,38 @@ const ExperienceSection = () => {
           
           if (nodeEl && experienceEl && threshold !== undefined) {
             const isNodeAnimated = nodeEl.hasAttribute('data-animated');
-            const isCardAnimated = experienceEl.hasAttribute('data-animated');
             
             if (progress >= threshold && !isNodeAnimated) {
-              // Mark as animated immediately to prevent duplicate triggers
-              nodeEl.setAttribute('data-animated', 'true');
-              experienceEl.setAttribute('data-animated', 'true');
-              
-              // Node and card appear at EXACTLY the same time with matching easing
-              gsap.to(nodeEl, {
-                scale: 1,
-                opacity: 1,
-                duration: 0.6,
-                ease: "power2.out", // Changed to match card easing
-                overwrite: true // Prevent animation conflicts
-              });
-              nodeEl.style.boxShadow = `0 0 30px ${exp.themeColor}, 0 0 60px ${exp.themeColor}40`;
-              
-              gsap.to(experienceEl, {
-                opacity: 1,
-                x: 0,
-                duration: 0.6, // Matched duration to node
-                ease: "power2.out",
-                overwrite: true // Prevent animation conflicts
-              });
-              
+              shouldAnimate.push({ index, nodeEl, experienceEl, exp, threshold });
             } else if (progress < threshold && isNodeAnimated) {
-              // Mark as not animated immediately
-              nodeEl.removeAttribute('data-animated');
-              experienceEl.removeAttribute('data-animated');
-              
-              // Both disappear when line retreats
-              gsap.to(nodeEl, {
-                scale: 0,
-                opacity: 0,
-                duration: 0.3,
-                ease: "power2.in",
-                overwrite: true
-              });
-              nodeEl.style.boxShadow = `0 0 20px ${exp.themeColor}`;
-              
-              gsap.to(experienceEl, {
-                opacity: 0,
-                x: 100,
-                duration: 0.3, // Matched duration to node
-                ease: "power2.in",
-                overwrite: true
-              });
+              shouldHide.push({ index, nodeEl, experienceEl, exp });
             }
           }
         });
+        
+        // Handle hiding (immediate for reverse scroll)
+        if (shouldHide.length > 0) {
+          animationQueue.clear();
+          
+          shouldHide.forEach(({ nodeEl, experienceEl, exp }) => {
+            nodeEl.removeAttribute('data-animated');
+            experienceEl.removeAttribute('data-animated');
+            
+            gsap.set(nodeEl, { scale: 0, opacity: 0 });
+            gsap.set(experienceEl, { opacity: 0, x: 100 });
+            nodeEl.style.boxShadow = `0 0 20px ${exp.themeColor}`;
+          });
+        }
+        
+        // Handle showing (queue for sequential animation)
+        if (shouldAnimate.length > 0) {
+          // Sort by threshold to ensure proper order
+          shouldAnimate.sort((a, b) => a.threshold - b.threshold);
+          
+          shouldAnimate.forEach(animData => {
+            animationQueue.enqueue(animData);
+          });
+        }
 
         // Calculate current color based on progress and node positions
         const totalExperiences = experiences.length;
@@ -249,6 +315,8 @@ const ExperienceSection = () => {
     return () => {
       clearTimeout(positionTimer);
       window.removeEventListener('resize', handleResize);
+      animationQueue.clear();
+      
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.trigger === sectionRef.current) {
           trigger.kill();
