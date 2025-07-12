@@ -393,7 +393,7 @@ const ExperienceSection = () => {
                   {/* Header */}
                   <div className="experience-header">
                     <div>
-                      <div className="company-badge">
+                      <div className="company-badge mb-4">
                         {exp.companyName}
                       </div>
                       <h3 className="experience-title">{exp.title}</h3>
