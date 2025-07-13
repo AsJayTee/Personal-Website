@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -10,12 +10,15 @@ const Modal = ({
   size = 'medium',
   showCloseButton = true,
   className = '',
-  backdropBlur = true 
+  backdropBlur = true,
+  exitAnimation = 'default'
 }) => {
   const modalRef = useRef(null);
   const backdropRef = useRef(null);
   const contentRef = useRef(null);
   const closeButtonRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
 
   // Size variants
   const sizeClasses = {
@@ -28,8 +31,8 @@ const Modal = ({
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
+      if (e.key === 'Escape' && isOpen && !isAnimating) {
+        handleClose();
       }
     };
 
@@ -43,27 +46,88 @@ const Modal = ({
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = '';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, isAnimating]);
 
   // Handle backdrop click
   const handleBackdropClick = (e) => {
-    if (e.target === backdropRef.current) {
-      onClose();
+    if (e.target === backdropRef.current && !isAnimating) {
+      handleClose();
     }
   };
 
-  // GSAP animations
+  // Handle close with animation
+  const handleClose = () => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    
+    // Run exit animation
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setShouldShow(false);
+        setIsAnimating(false);
+        onClose();
+      }
+    });
+
+    // Close button exit
+    if (closeButtonRef.current) {
+      tl.to(closeButtonRef.current, {
+        rotation: 90,
+        scale: 0,
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.in"
+      });
+    }
+
+    // Enhanced content exit based on animation type
+    if (exitAnimation === 'enhanced') {
+      tl.to(contentRef.current, {
+        opacity: 0,
+        scale: 0.7,
+        y: -50,
+        rotationX: 15,
+        duration: 0.4,
+        ease: "power2.in"
+      }, "-=0.1")
+      .to(backdropRef.current, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in"
+      }, "-=0.2");
+    } else {
+      // Default exit animation
+      tl.to(contentRef.current, {
+        opacity: 0,
+        scale: 0.9,
+        y: -30,
+        duration: 0.25,
+        ease: "power2.in"
+      }, "-=0.1")
+      .to(backdropRef.current, {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.in"
+      }, "-=0.1");
+    }
+  };
+
+  // Entrance animation
   useGSAP(() => {
     if (!modalRef.current) return;
 
-    if (isOpen) {
+    if (isOpen && !shouldShow) {
+      setShouldShow(true);
+      
       // Set initial state
       gsap.set(modalRef.current, { display: 'flex' });
       gsap.set(backdropRef.current, { opacity: 0 });
       gsap.set(contentRef.current, { 
         opacity: 0, 
         scale: 0.8, 
-        y: 50 
+        y: 50,
+        rotationX: -15
       });
 
       // Entrance animation
@@ -78,53 +142,43 @@ const Modal = ({
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.4,
-        ease: "back.out(1.7)"
+        rotationX: 0,
+        duration: 0.5,
+        ease: "back.out(1.4)"
       }, "-=0.1");
 
       // Close button animation
       if (closeButtonRef.current) {
         gsap.fromTo(closeButtonRef.current, 
-          { rotation: -90, opacity: 0 },
+          { rotation: -90, opacity: 0, scale: 0.8 },
           { 
             rotation: 0, 
             opacity: 1, 
-            duration: 0.3, 
-            delay: 0.2,
-            ease: "power2.out" 
+            scale: 1,
+            duration: 0.4, 
+            delay: 0.3,
+            ease: "back.out(1.7)" 
           }
         );
       }
-    } else {
-      // Exit animation
-      const tl = gsap.timeline({
-        onComplete: () => {
-          gsap.set(modalRef.current, { display: 'none' });
-        }
-      });
-
-      tl.to(contentRef.current, {
-        opacity: 0,
-        scale: 0.9,
-        y: -30,
-        duration: 0.25,
-        ease: "power2.in"
-      })
-      .to(backdropRef.current, {
-        opacity: 0,
-        duration: 0.2,
-        ease: "power2.in"
-      }, "-=0.1");
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Reset when modal closes
+  useEffect(() => {
+    if (!isOpen && shouldShow) {
+      setShouldShow(false);
+      setIsAnimating(false);
+    }
+  }, [isOpen]);
+
+  if (!shouldShow && !isOpen) return null;
 
   return (
     <div
       ref={modalRef}
       className="fixed inset-0 z-[9999] items-center justify-center p-4"
-      style={{ display: 'none' }}
+      style={{ display: shouldShow ? 'flex' : 'none' }}
     >
       {/* Backdrop */}
       <div
@@ -155,9 +209,10 @@ const Modal = ({
             {showCloseButton && (
               <button
                 ref={closeButtonRef}
-                onClick={onClose}
+                onClick={handleClose}
                 className="ml-auto p-2 hover:bg-[#333333] rounded-lg transition-colors duration-200 group"
                 aria-label="Close modal"
+                disabled={isAnimating}
               >
                 <svg
                   className="w-6 h-6 text-[#d9ecff] group-hover:text-white transition-colors duration-200"
