@@ -1,7 +1,10 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import HeroWordsSlider from "../components/HeroWordsSlider";
-import HeroExperience from "../components/HeroExperience";
+import { lazy } from "react";
+
+// Hero.jsx - Three.js loaded asynchronously  
+const HeroExperience = lazy(() => import("../components/HeroExperience"));
 
 const Hero = () => {
   useGSAP(() => {
