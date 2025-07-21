@@ -76,7 +76,7 @@ const FancyLabel = ({ text = "Professional Collaboration", position = "top-right
       ref={labelRef}
       className={`absolute ${positionClasses[position]} z-10 group cursor-default`}
     >
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden rounded-full">
         {/* Glassmorphism background */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#7209b7]/20 to-[#43ccf7]/20 backdrop-blur-md rounded-full" />
         
@@ -86,7 +86,7 @@ const FancyLabel = ({ text = "Professional Collaboration", position = "top-right
         </div>
 
         {/* Content container */}
-        <div className="relative flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5">
+        <div className="relative flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 z-10">
           {/* Icon */}
           <div className="relative w-5 h-5 md:w-6 md:h-6">
             <svg 
@@ -120,13 +120,13 @@ const FancyLabel = ({ text = "Professional Collaboration", position = "top-right
           <span className="text-[#d9ecff] text-xs md:text-sm font-semibold whitespace-nowrap select-none">
             {text}
           </span>
-
-          {/* Shimmer effect */}
-          <div 
-            ref={shimmerRef}
-            className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full pointer-events-none"
-          />
         </div>
+
+        {/* Shimmer effect - now properly contained by the rounded overflow-hidden parent */}
+        <div 
+          ref={shimmerRef}
+          className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full pointer-events-none"
+        />
 
         {/* Subtle glow effect */}
         <div className="absolute -inset-1 bg-gradient-to-r from-[#7209b7]/20 to-[#43ccf7]/20 rounded-full blur-md opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
