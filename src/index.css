@@ -322,6 +322,28 @@ section {
   will-change: transform;
 }
 
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-box-shadow {
+  will-change: box-shadow;
+}
+
+/* Hardware acceleration helpers */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimized transitions */
+.transition-performance {
+  transition-property: transform, opacity, box-shadow, filter;
+  transition-timing-function: ease-out;
+  transition-duration: 0.2s;
+}
+
 /* Prevent layout shift during loading */
 .hero-3d-layout > div {
   contain: layout style paint;
@@ -665,8 +687,9 @@ section {
     @apply w-0.5;
   }
 }
+
 /* ===== PROJECT SHOWCASE HOVER EFFECTS ===== */
-/* Add these styles to your existing .app-showcase section in index.css */
+/* Simplified hover effects - lift and glow only */
 
 .app-showcase {
   @apply w-full px-5 md:px-20 py-10 md:py-20 flex items-center justify-center;
@@ -681,18 +704,23 @@ section {
     .image-wrapper {
       @apply xl:h-[70vh] md:h-[50vh] h-96 relative overflow-hidden rounded-xl;
       max-height: 70vh;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      will-change: box-shadow, transform;
 
       img {
-        @apply w-full h-full object-cover absolute inset-0 transition-transform duration-300;
+        @apply w-full h-full object-cover absolute inset-0;
       }
 
-      /* Clickable hover effects */
-      &.cursor-pointer:hover img {
-        @apply transform scale-105;
+      /* Simplified hover effects - lift and glow only */
+      &.cursor-pointer:hover {
+        box-shadow: 0 8px 32px rgba(67, 204, 247, 0.3), 
+                    0 0 0 1px rgba(67, 204, 247, 0.2);
+        transform: translateY(-2px);
       }
 
-      &.cursor-pointer:active img {
-        @apply transform scale-[0.98];
+      &.cursor-pointer:active {
+        transform: translateY(0px);
+        box-shadow: 0 4px 16px rgba(67, 204, 247, 0.2);
       }
     }
 
@@ -714,19 +742,24 @@ section {
 
     .image-wrapper {
       @apply xl:h-[37vh] md:h-52 lg:h-72 h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0 overflow-hidden;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      will-change: box-shadow, transform;
 
-      /* Clickable hover effects */
-      &.cursor-pointer:hover img {
-        @apply transform scale-105;
+      /* Simplified hover effects - lift and glow only */
+      &.cursor-pointer:hover {
+        box-shadow: 0 6px 24px rgba(114, 9, 183, 0.25), 
+                    0 0 0 1px rgba(114, 9, 183, 0.15);
+        transform: translateY(-1px);
       }
 
-      &.cursor-pointer:active img {
-        @apply transform scale-[0.98];
+      &.cursor-pointer:active {
+        transform: translateY(0px);
+        box-shadow: 0 3px 12px rgba(114, 9, 183, 0.15);
       }
     }
 
     img {
-      @apply w-full h-full object-contain transition-transform duration-300;
+      @apply w-full h-full object-contain;
     }
 
     h2 {

@@ -123,7 +123,7 @@ useGSAP(() => {
             {/* LEFT */}
             <div className="first-project-wrapper" ref={project1Ref}>
               <div 
-                className="image-wrapper cursor-pointer group"
+                className="image-wrapper cursor-pointer"
                 onClick={() => handleProjectClick(projects[0])}
               >
                 <FancyLabel text="Professional Collaboration" position="top-right" />
@@ -131,15 +131,6 @@ useGSAP(() => {
                   src={projects[0].image} 
                   alt={projects[0].title}
                 />
-                {/* Click indicator overlay */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <div className="bg-black/40 rounded-full p-3">
-                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </div>
-                </div>
               </div>
               <div className="text-content">
                 <h2>
@@ -170,22 +161,13 @@ useGSAP(() => {
             <div className="project-list-wrapper">
               <div className="project" ref={project2Ref}>
                 <div 
-                  className="image-wrapper bg-[#dbffdc] cursor-pointer group"
+                  className="image-wrapper bg-[#dbffdc] cursor-pointer"
                   onClick={() => handleProjectClick(projects[1])}
                 >
                   <img 
                     src={projects[1].image} 
                     alt={projects[1].title}
                   />
-                  {/* Click indicator overlay */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <div className="bg-black/40 rounded-full p-2">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </div>
-                  </div>
                 </div>
                 <h2>
                   {projects[1].title}
@@ -193,22 +175,13 @@ useGSAP(() => {
               </div>
               <div className="project" ref={project3Ref}>
                 <div 
-                  className="image-wrapper bg-[#e7e7ff] cursor-pointer group"
+                  className="image-wrapper bg-[#e7e7ff] cursor-pointer"
                   onClick={() => handleProjectClick(projects[2])}
                 >
                   <img 
                     src={projects[2].image} 
                     alt={projects[2].title}
                   />
-                  {/* Click indicator overlay */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <div className="bg-black/40 rounded-full p-2">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </div>
-                  </div>
                 </div>
                 <h2>
                   {projects[2].title}
