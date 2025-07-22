@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -14,6 +14,7 @@ const ExperienceSection = () => {
   const experienceRefs = useRef([]);
   const nodeRefs = useRef([]);
   const cardRefs = useRef([]);
+  const [nodePositions, setNodePositions] = useState([]);
 
   // Set CSS custom properties for theming
   useEffect(() => {
@@ -24,80 +25,111 @@ const ExperienceSection = () => {
     });
   }, []);
 
-  useGSAP(() => {
-    const tl = gsap.timeline();
-
-    // Function to position nodes relative to their cards
-    const updateNodePositions = () => {
+  // Calculate and cache node positions
+  useEffect(() => {
+    const calculateNodePositions = () => {
+      const positions = [];
       experiences.forEach((_, index) => {
         const cardEl = cardRefs.current[index];
-        const nodeEl = nodeRefs.current[index];
         const experienceEl = experienceRefs.current[index];
         
-        if (cardEl && nodeEl && experienceEl) {
-          // Calculate position based on the experience card container
-          // Add the card's offset within its experience container
+        if (cardEl && experienceEl) {
           const experienceOffsetTop = experienceEl.offsetTop;
           const cardOffsetTop = cardEl.offsetTop;
-          const totalOffset = experienceOffsetTop + cardOffsetTop;
-          
-          // Position node at the top of the actual card content
-          nodeEl.style.top = `${totalOffset + 10}px`;
+          const totalOffset = experienceOffsetTop + cardOffsetTop + 10;
+          positions.push(totalOffset);
         }
       });
+      setNodePositions(positions);
     };
 
-    // Calculate when each node should appear based on its position relative to timeline
-    const calculateNodeThresholds = () => {
-      const timelineWrapper = timelineRef.current;
-      if (!timelineWrapper) return [];
-      
-      const wrapperHeight = timelineWrapper.offsetHeight;
-      const thresholds = [];
-      
-      experiences.forEach((_, index) => {
-        const nodeEl = nodeRefs.current[index];
-        if (nodeEl && wrapperHeight > 0) {
-          const nodeTop = parseFloat(nodeEl.style.top || '0');
-          const threshold = nodeTop / wrapperHeight;
-          thresholds.push(Math.max(0, Math.min(1, threshold)));
-        } else {
-          thresholds.push(0);
-        }
-      });
-      
-      return thresholds;
-    };
+    // Initial calculation after DOM is ready
+    const timer = setTimeout(calculateNodePositions, 100);
 
-    // Set initial states
-    gsap.set(experienceRefs.current, {
-      opacity: 0,
-      x: 100
-    });
-
-    gsap.set(nodeRefs.current, {
-      scale: 0,
-      opacity: 0
-    });
-
-    gsap.set(timelineLineRef.current, {
-      scaleY: 0,
-      transformOrigin: "top center"
-    });
-
-    // Initial positioning after DOM is ready
-    const positionTimer = setTimeout(() => {
-      updateNodePositions();
-    }, 100);
-
-    // Update positions on resize
+    // Recalculate on resize with debounce
+    let resizeTimer;
     const handleResize = () => {
-      setTimeout(updateNodePositions, 100);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(calculateNodePositions, 150);
     };
+    
     window.addEventListener('resize', handleResize);
+    
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
-    // Function to interpolate between colors
+  // Position nodes based on cached positions
+  useEffect(() => {
+    nodePositions.forEach((position, index) => {
+      const nodeEl = nodeRefs.current[index];
+      if (nodeEl) {
+        nodeEl.style.top = `${position}px`;
+      }
+    });
+  }, [nodePositions]);
+
+  // Set up Intersection Observers for immediate visual feedback
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-15% 0px -15% 0px', // Balanced margins for better exit/enter timing
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const index = experienceRefs.current.findIndex(ref => ref === entry.target);
+        if (index !== -1) {
+          const node = nodeRefs.current[index];
+          
+          if (entry.isIntersecting) {
+            // Element is entering viewport
+            entry.target.setAttribute('data-visible', 'true');
+            if (node) {
+              node.setAttribute('data-visible', 'true');
+              // Add glow effect after transition
+              setTimeout(() => {
+                node.style.boxShadow = `0 0 30px ${experiences[index].themeColor}, 0 0 60px ${experiences[index].themeColor}40`;
+              }, 300);
+            }
+          } else {
+            // Element is leaving viewport
+            entry.target.setAttribute('data-visible', 'false');
+            if (node) {
+              node.setAttribute('data-visible', 'false');
+              // Reset glow effect
+              node.style.boxShadow = `0 0 20px ${experiences[index].themeColor}`;
+            }
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all experience cards
+    experienceRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Timeline animation with optimized color interpolation
+  useGSAP(() => {
+    // Helper function to interpolate between colors
     const interpolateColor = (color1, color2, factor) => {
+      const hexToRgb = (hex) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null;
+      };
+
       const c1 = hexToRgb(color1);
       const c2 = hexToRgb(color2);
       const result = {
@@ -108,195 +140,49 @@ const ExperienceSection = () => {
       return `rgb(${result.r}, ${result.g}, ${result.b})`;
     };
 
-    const hexToRgb = (hex) => {
-      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-      } : null;
-    };
+    // Pre-calculate color stops for better performance
+    const colorStops = experiences.map((exp, index) => ({
+      position: index / (experiences.length - 1),
+      color: exp.themeColor,
+      secondary: exp.secondaryColor
+    }));
 
-    // Global animation queue system
-    const animationQueue = {
-      isProcessing: false,
-      queue: [],
-      currentSequence: null,
-      
-      // Add animation to queue
-      enqueue(animationData) {
-        // Remove duplicates for the same index
-        this.queue = this.queue.filter(item => item.index !== animationData.index);
-        this.queue.push(animationData);
-        this.processQueue();
-      },
-      
-      // Clear queue (for reverse scroll)
-      clear() {
-        this.queue = [];
-        if (this.currentSequence) {
-          this.currentSequence.kill();
-          this.currentSequence = null;
-        }
-        this.isProcessing = false;
-      },
-      
-      // Process animations sequentially
-      processQueue() {
-        if (this.isProcessing || this.queue.length === 0) return;
-        
-        this.isProcessing = true;
-        const nextAnimation = this.queue.shift();
-        
-        this.executeSequence(nextAnimation).then(() => {
-          this.isProcessing = false;
-          // Process next in queue
-          if (this.queue.length > 0) {
-            this.processQueue();
-          }
-        });
-      },
-      
-      // Execute a single node->card sequence
-      executeSequence(animData) {
-        return new Promise((resolve) => {
-          const { index, nodeEl, experienceEl, exp } = animData;
-          
-          // Create a timeline for this sequence
-          const sequenceTimeline = gsap.timeline({
-            onComplete: resolve
-          });
-          
-          this.currentSequence = sequenceTimeline;
-          
-          // Mark elements as animated
-          nodeEl.setAttribute('data-animated', 'true');
-          
-          // Node appears first
-          sequenceTimeline.to(nodeEl, {
-            scale: 1,
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.out",
-            onComplete: () => {
-              nodeEl.style.boxShadow = `0 0 30px ${exp.themeColor}, 0 0 60px ${exp.themeColor}40`;
-            }
-          });
-          
-          // Card appears after node completes (sequential, not overlapping)
-          sequenceTimeline.to(experienceEl, {
-            opacity: 1,
-            x: 0,
-            duration: 0.7,
-            ease: "power2.out",
-            onStart: () => {
-              experienceEl.setAttribute('data-animated', 'true');
-            }
-          }, "+=0.3"); // 0.3s gap between node completion and card start
-        });
-      }
-    };
-
-    // Timeline line animation with sequential queue system
+    // Timeline animation - only handles the line growth and color
     ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top center",
       end: "bottom center",
+      scrub: 1,
       onUpdate: (self) => {
         const progress = self.progress;
         
-        // Scale the timeline
+        // Animate timeline scale
         gsap.to(timelineLineRef.current, {
           scaleY: progress,
-          duration: 0.3,
-          ease: "power2.out"
+          duration: 0.1,
+          ease: "none"
         });
 
-        // Calculate node thresholds and queue animations
-        const thresholds = calculateNodeThresholds();
-        
-        // Collect all nodes that should be animated
-        const shouldAnimate = [];
-        const shouldHide = [];
-        
-        experiences.forEach((exp, index) => {
-          const nodeEl = nodeRefs.current[index];
-          const experienceEl = experienceRefs.current[index];
-          const threshold = thresholds[index];
-          
-          if (nodeEl && experienceEl && threshold !== undefined) {
-            const isNodeAnimated = nodeEl.hasAttribute('data-animated');
-            
-            if (progress >= threshold && !isNodeAnimated) {
-              shouldAnimate.push({ index, nodeEl, experienceEl, exp, threshold });
-            } else if (progress < threshold && isNodeAnimated) {
-              shouldHide.push({ index, nodeEl, experienceEl, exp });
-            }
-          }
-        });
-        
-        // Handle hiding (immediate for reverse scroll)
-        if (shouldHide.length > 0) {
-          animationQueue.clear();
-          
-          shouldHide.forEach(({ nodeEl, experienceEl, exp }) => {
-            nodeEl.removeAttribute('data-animated');
-            experienceEl.removeAttribute('data-animated');
-            
-            gsap.set(nodeEl, { scale: 0, opacity: 0 });
-            gsap.set(experienceEl, { opacity: 0, x: 100 });
-            nodeEl.style.boxShadow = `0 0 20px ${exp.themeColor}`;
-          });
-        }
-        
-        // Handle showing (queue for sequential animation)
-        if (shouldAnimate.length > 0) {
-          // Sort by threshold to ensure proper order
-          shouldAnimate.sort((a, b) => a.threshold - b.threshold);
-          
-          shouldAnimate.forEach(animData => {
-            animationQueue.enqueue(animData);
-          });
-        }
-
-        // Calculate current color based on progress and node positions
-        const totalExperiences = experiences.length;
+        // Calculate current color based on progress
         let currentColor = experiences[0].themeColor;
-        let nextColor = experiences[0].secondaryColor;
         
-        // Determine which experience segment we're in
-        if (totalExperiences > 1) {
-          const progressPercentage = progress * 100;
+        // Find which color segment we're in
+        for (let i = 0; i < colorStops.length - 1; i++) {
+          const start = colorStops[i].position;
+          const end = colorStops[i + 1].position;
           
-          if (progressPercentage <= 25) {
-            // First quarter - start with first experience color
-            currentColor = experiences[0].themeColor;
-            nextColor = experiences[1] ? experiences[1].themeColor : experiences[0].secondaryColor;
-            const segmentProgress = progressPercentage / 25;
-            currentColor = interpolateColor(currentColor, nextColor, segmentProgress * 0.3);
-          } else if (progressPercentage <= 50 && experiences[1]) {
-            // Second quarter - transition to second experience
-            currentColor = experiences[0].themeColor;
-            nextColor = experiences[1].themeColor;
-            const segmentProgress = (progressPercentage - 25) / 25;
-            currentColor = interpolateColor(currentColor, nextColor, segmentProgress);
-          } else if (progressPercentage <= 75 && experiences[2]) {
-            // Third quarter - transition to third experience
-            currentColor = experiences[1] ? experiences[1].themeColor : experiences[0].themeColor;
-            nextColor = experiences[2].themeColor;
-            const segmentProgress = (progressPercentage - 50) / 25;
-            currentColor = interpolateColor(currentColor, nextColor, segmentProgress);
-          } else {
-            // Final quarter - settle on last experience color
-            const lastExp = experiences[totalExperiences - 1];
-            currentColor = lastExp.themeColor;
-            nextColor = lastExp.secondaryColor;
-            const segmentProgress = (progressPercentage - 75) / 25;
-            currentColor = interpolateColor(currentColor, nextColor, segmentProgress * 0.3);
+          if (progress >= start && progress <= end) {
+            const segmentProgress = (progress - start) / (end - start);
+            currentColor = interpolateColor(
+              colorStops[i].color,
+              colorStops[i + 1].color,
+              segmentProgress
+            );
+            break;
           }
         }
 
-        // Create dynamic gradient that grows with the timeline
+        // Apply gradient with current color
         const gradientStop = Math.max(20, Math.min(80, progress * 100));
         const gradient = `linear-gradient(
           0deg,
@@ -306,17 +192,12 @@ const ExperienceSection = () => {
           rgba(23, 23, 32, 0) 100%
         )`;
 
-        // Apply the gradient
         timelineLineRef.current.style.background = gradient;
       }
     });
 
     // Cleanup
     return () => {
-      clearTimeout(positionTimer);
-      window.removeEventListener('resize', handleResize);
-      animationQueue.clear();
-      
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.trigger === sectionRef.current) {
           trigger.kill();
@@ -324,13 +205,6 @@ const ExperienceSection = () => {
       });
     };
   }, []);
-
-  const getNodePosition = (index) => {
-    // Calculate position of each node along the timeline
-    const totalExperiences = experiences.length;
-    const spacing = 100 / (totalExperiences + 1);
-    return `${spacing * (index + 1)}%`;
-  };
 
   return (
     <section 
@@ -350,6 +224,7 @@ const ExperienceSection = () => {
             <div 
               ref={timelineLineRef}
               className="timeline-line"
+              style={{ transform: 'scaleY(0)', transformOrigin: 'top center' }}
             />
             
             {/* Timeline Nodes */}
@@ -358,8 +233,10 @@ const ExperienceSection = () => {
                 key={exp.id}
                 ref={el => nodeRefs.current[index] = el}
                 className="timeline-node"
+                data-visible="false"
                 style={{
-                  '--node-color': exp.themeColor
+                  '--node-color': exp.themeColor,
+                  boxShadow: `0 0 20px ${exp.themeColor}`
                 }}
               >
                 <img 
@@ -378,6 +255,7 @@ const ExperienceSection = () => {
                 key={exp.id}
                 ref={el => experienceRefs.current[index] = el}
                 className="experience-card"
+                data-visible="false"
                 style={{
                   marginTop: index === 0 ? '0' : '8rem'
                 }}

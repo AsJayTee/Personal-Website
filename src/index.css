@@ -501,11 +501,12 @@ section {
   opacity: 1;
 }
 
-/* ===== TIMELINE STYLES ===== */
+/* ===== TIMELINE STYLES - OPTIMIZED VERSION ===== */
 
 /* Timeline Container and Layout */
 .timeline-container {
   @apply relative w-full max-w-7xl mx-auto;
+  contain: layout style;
 }
 
 .timeline-wrapper {
@@ -540,12 +541,29 @@ section {
   transform: translateX(-50%);
   border-color: var(--node-color, #ffffff);
   box-shadow: 0 0 20px var(--node-color, #ffffff);
-  transition: all 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+              opacity 0.4s ease-out,
+              box-shadow 0.5s ease-out;
+  will-change: transform, opacity;
   top: 0; /* Will be dynamically positioned */
+}
+
+.timeline-node[data-visible="false"] {
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+  transition: transform 0.3s ease-in, 
+              opacity 0.3s ease-in,
+              box-shadow 0.3s ease-in;
+}
+
+.timeline-node[data-visible="true"] {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
 }
 
 .timeline-node:hover {
   transform: translateX(-50%) scale(1.1);
+  z-index: 50;
 }
 
 @media (max-width: 768px) {
@@ -572,12 +590,28 @@ section {
 
 .experience-card {
   @apply relative mb-20 lg:mb-32;
+  transition: transform 0.5s ease-out, 
+              opacity 0.5s ease-out;
+  will-change: transform, opacity;
+}
+
+.experience-card[data-visible="false"] {
+  transform: translateX(60px);
+  opacity: 0;
+  transition: transform 0.35s ease-in, 
+              opacity 0.35s ease-in;
+}
+
+.experience-card[data-visible="true"] {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 .experience-card-content {
   @apply bg-[#1a1a1a] border border-[#333333] rounded-xl p-6 lg:p-8;
   margin-left: 50%;
   margin-right: 1rem;
+  contain: layout style paint;
 }
 
 @media (max-width: 1024px) {
@@ -647,22 +681,6 @@ section {
   color: var(--theme-primary, #FF6B35);
 }
 
-/* Animation Classes */
-.timeline-fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.timeline-slide-left {
-  opacity: 0;
-  transform: translateX(-100px);
-}
-
-.timeline-slide-right {
-  opacity: 0;
-  transform: translateX(100px);
-}
-
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
   .timeline-wrapper {
@@ -671,6 +689,13 @@ section {
   
   .experience-card-content {
     @apply ml-20;
+  }
+  
+  .experience-card[data-visible="false"] {
+    transform: translateX(40px);
+    opacity: 0;
+    transition: transform 0.35s ease-in, 
+                opacity 0.35s ease-in;
   }
 }
 
@@ -685,6 +710,13 @@ section {
   
   .timeline-line {
     @apply w-0.5;
+  }
+  
+  .experience-card[data-visible="false"] {
+    transform: translateX(30px);
+    opacity: 0;
+    transition: transform 0.35s ease-in, 
+                opacity 0.35s ease-in;
   }
 }
 
