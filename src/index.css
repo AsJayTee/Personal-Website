@@ -1042,3 +1042,15 @@ section {
 .padding-x-lg {
   @apply px-5 md:px-20;
 }
+
+#projects {
+  scroll-margin-top: 100px; 
+}
+
+#experience {
+  scroll-margin-top: 20px; 
+}
+
+#skills {
+  scroll-margin-top: -20px; 
+}

@@ -115,9 +115,9 @@ useGSAP(() => {
   }, []);
 
   return (
-    <div className="mt-0 max-md:-mt-25">
+    <div id="projects" className="mt-0 max-md:-mt-25">
       <TitleHeader title={"My Projects"} sub={"Things I Built 🔧"} />
-      <section id="projects" className="app-showcase" ref={sectionRef}>
+      <section className="app-showcase" ref={sectionRef}>
         <div className="w-full">
           <div className="showcaselayout">
             {/* LEFT */}

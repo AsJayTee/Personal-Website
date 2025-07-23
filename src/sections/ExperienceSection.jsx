@@ -210,7 +210,7 @@ const ExperienceSection = () => {
     <section 
       id="experience" 
       ref={sectionRef}
-      className="w-full md:mt-10 mt-10 px-5 md:px-20 py-10 md:py-20"
+      className="w-full md:mt-10 mt-10 px-5 md:px-20 pt-10 md:pt-20 pb-5 md:pb-10"
     >
       <div className="w-full">
         <TitleHeader
