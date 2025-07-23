@@ -215,7 +215,7 @@ const ExperienceSection = () => {
       <div className="w-full">
         <TitleHeader
           title={"Professional Work Experience"}
-          sub={"Things I did 💼"}
+          sub={"Things I Did 💼"}
         />
         
         <div className="mt-32 relative timeline-container" style={{ minHeight: '100vh' }}>
