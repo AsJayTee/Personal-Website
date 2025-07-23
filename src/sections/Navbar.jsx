@@ -43,6 +43,15 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [enableTransitions]);
+
+  // Function to scroll to top smoothly
+  const scrollToTop = (e) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
   
   return (
     <header 
@@ -52,7 +61,7 @@ const Navbar = () => {
       }}
     >
       <div className="inner">
-        <a href="#hero" className="logo">
+        <a href="#" onClick={scrollToTop} className="logo">
           Siah Jin Thau
         </a>
         
