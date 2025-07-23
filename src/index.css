@@ -823,3 +823,222 @@ section {
     }
   }
 }
+
+/* ===== SKILLS SECTION STYLES - Inspired by Tech Stack Design ===== */
+
+/* Section padding utility */
+.section-padding {
+  @apply py-20 md:py-32;
+}
+
+/* Flex center utility */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+/* Tech Grid Layout - Same as inspiration */
+.tech-grid {
+  @apply grid xl:grid-cols-5 md:grid-cols-3 grid-cols-1 xl:gap-16 md:gap-10 gap-5 mt-16;
+}
+
+/* Card border utility - Same as inspiration */
+.card-border {
+  @apply border border-[#333333] bg-[#1a1a1a];
+}
+
+/* Tech Card Animated Background - Slides up from bottom */
+.tech-card-animated-bg {
+  @apply absolute left-0 bottom-[-100%] w-full h-full bg-[#2D3240] group-hover:bottom-0 transition-all duration-700;
+}
+
+/* Tech Card Content - Main container with better text positioning */
+.tech-card-content {
+  @apply flex flex-col justify-between items-center xl:gap-3 xl:h-[50vh] h-[40vh] overflow-hidden relative z-10 group-hover:cursor-grab;
+  padding-top: 2rem;
+  padding-bottom: 3rem; /* More bottom padding to prevent text clipping */
+
+  & p {
+    @apply text-sm xl:text-base font-semibold text-[#d9ecff] text-center; /* Smaller text */
+    margin-bottom: 0; /* Remove default margin */
+  }
+}
+
+/* Skill text container - Positioned higher in the card */
+.skill-text-container {
+  margin-top: auto;
+  margin-bottom: 1rem; /* Push text up from bottom */
+}
+
+/* Tech Icon Wrapper - Contains the skill icons */
+.tech-icon-wrapper {
+  @apply flex justify-center items-center w-52 h-60 relative;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* Second icon adjustment - Move it down by a few pixels */
+.second-icon-adjustment {
+  transform: translateY(6px);
+}
+
+/* Responsive adjustments for tech cards */
+@media (max-width: 1024px) {
+  .tech-card-content {
+    height: 35vh;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+  }
+  
+  .tech-icon-wrapper {
+    width: 12rem;
+    height: 12rem;
+  }
+  
+  .skill-text-container {
+    margin-bottom: 1.25rem;
+  }
+  
+  .tech-card-content p {
+    font-size: 1rem; /* Smaller on tablet */
+  }
+  
+  .second-icon-adjustment {
+    transform: translateY(4px);
+  }
+}
+
+@media (max-width: 768px) {
+  .tech-card-content {
+    height: 30vh;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    padding-bottom: 2rem;
+  }
+  
+  .tech-icon-wrapper {
+    width: 10rem;
+    height: 10rem;
+  }
+  
+  .skill-text-container {
+    margin-bottom: 1rem;
+  }
+  
+  .tech-card-content p {
+    font-size: 1rem; 
+  }
+  
+  .second-icon-adjustment {
+    transform: translateY(3px);
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-card-content {
+    height: 25vh;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .tech-icon-wrapper {
+    width: 8rem;
+    height: 8rem;
+  }
+  
+  .skill-text-container {
+    margin-bottom: 0.75rem;
+  }
+  
+  .tech-card-content p {
+    font-size: 1rem; /* Smallest on very small screens */
+  }
+  
+  .second-icon-adjustment {
+    transform: translateY(2px);
+  }
+}
+
+/* Skill modal specific styles */
+.skill-modal .proficiency-bar {
+  position: relative;
+  background: linear-gradient(90deg, transparent 0%, rgba(67, 204, 247, 0.1) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Enhanced modal animations */
+.skill-modal .modal-content {
+  animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Proficiency level indicators */
+.proficiency-expert {
+  @apply bg-emerald-500/20 text-emerald-400 border-emerald-500/30;
+}
+
+.proficiency-intermediate {
+  @apply bg-blue-500/20 text-blue-400 border-blue-500/30;
+}
+
+.proficiency-familiar {
+  @apply bg-amber-500/20 text-amber-400 border-amber-500/30;
+}
+
+/* Smooth scrolling for skill section navigation */
+.skills-nav-link {
+  scroll-behavior: smooth;
+  transition: color 0.2s ease;
+}
+
+.skills-nav-link:hover {
+  color: #ffffff;
+}
+
+/* Accessibility improvements */
+.tech-card:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.tech-card [role="button"]:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* Loading state for skill icons */
+.skill-icon-loading {
+  background: linear-gradient(90deg, #333333 25%, #444444 50%, #333333 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Padding utility classes */
+.padding-x {
+  @apply px-5 md:px-10;
+}
+
+.padding-x-lg {
+  @apply px-5 md:px-20;
+}
