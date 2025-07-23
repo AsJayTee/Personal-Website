@@ -9,7 +9,6 @@ const Navbar = () => {
     }
     return false;
   });
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [enableTransitions, setEnableTransitions] = useState(false);
   
   // Use useLayoutEffect to run before paint
@@ -44,6 +43,21 @@ const Navbar = () => {
     };
   }, [enableTransitions]);
 
+  // Mobile click animation handler
+  const handleMobileClick = (e) => {
+    // Only apply on mobile/touch devices
+    if (window.innerWidth <= 1024) {
+      const target = e.currentTarget;
+      target.style.transform = 'scale(0.95)';
+      target.style.opacity = '0.8';
+      
+      setTimeout(() => {
+        target.style.transform = 'scale(1)';
+        target.style.opacity = '1';
+      }, 150);
+    }
+  };
+
   // Function to scroll to top smoothly
   const scrollToTop = (e) => {
     e.preventDefault();
@@ -52,6 +66,8 @@ const Navbar = () => {
       behavior: 'smooth'
     });
   };
+
+
   
   return (
     <header 
@@ -61,37 +77,16 @@ const Navbar = () => {
       }}
     >
       <div className="inner">
-        <a href="#" onClick={scrollToTop} className="logo">
+        <a 
+          href="#" 
+          onClick={scrollToTop} 
+          onTouchStart={handleMobileClick}
+          className="logo"
+        >
           Siah Jin Thau
         </a>
         
-        <button 
-          className="lg:hidden flex items-center text-white-50"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            {mobileMenuOpen ? (
-              <path d="M18 6L6 18M6 6l12 12" />
-            ) : (
-              <>
-                <path d="M3 12h18" />
-                <path d="M3 6h18" />
-                <path d="M3 18h18" />
-              </>
-            )}
-          </svg>
-        </button>
-
+        {/* Desktop Navigation - Hidden on mobile */}
         <nav className="desktop">
           <ul>
             {navLinks.map(({ link, name }) => (
@@ -105,36 +100,12 @@ const Navbar = () => {
           </ul>
         </nav>
         
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden pt-20 bg-black">
-            <nav className="container mx-auto px-5">
-              <ul className="flex flex-col space-y-6">
-                {navLinks.map(({ link, name }) => (
-                  <li key={name} className="text-xl">
-                    <a 
-                      href={link} 
-                      className="text-white-50 hover:text-white transition-colors duration-300"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {name}
-                    </a>
-                  </li>
-                ))}
-                <li className="pt-6 border-t border-black-50">
-                  <a 
-                    href="#contact" 
-                    className="text-white font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Contact me
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        )}
-        
-        <a href="#contact" className="contact-btn group">
+        {/* Contact button */}
+        <a 
+          href="#contact" 
+          className="contact-btn"
+          onTouchStart={handleMobileClick}
+        >
           <div className="inner">
             <span>Contact me</span>
           </div>

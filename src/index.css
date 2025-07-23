@@ -76,7 +76,7 @@ body {
 .wrapper {
   display: flex;
   flex-direction: column;
-  animation: wordSlider 21s infinite cubic-bezier(0.9, 0.01, 0.3, 0.99);
+  animation: wordSlider 27s infinite cubic-bezier(0.9, 0.01, 0.3, 0.99);
 }
 
 @keyframes wordSlider {
@@ -109,7 +109,7 @@ body {
   }
 }
 
-/* Navbar styles */
+/* Navbar styles - Responsive optimized */
 .navbar {
   position: fixed;
   width: 100%;
@@ -162,7 +162,6 @@ body {
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-weight: 600;
-  transition: transform 0.3s;
 }
 
 @media (min-width: 768px) {
@@ -172,10 +171,25 @@ body {
   }
 }
 
-.navbar .logo:hover {
-  transform: scale(1.05);
+/* Only apply hover effects on devices that support true hover */
+@media (hover: hover) and (pointer: fine) {
+  .navbar .logo:hover {
+    transform: scale(1.05);
+  }
+  
+  .navbar .logo {
+    transition: transform 0.3s ease, opacity 0.15s ease;
+  }
 }
 
+/* Mobile devices - faster transitions for click effects */
+@media (hover: none) and (pointer: coarse) {
+  .navbar .logo {
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+}
+
+/* Desktop Navigation */
 .navbar nav.desktop {
   display: none;
 }
@@ -219,8 +233,14 @@ body {
   width: 100%;
 }
 
+/* Contact Button */
 .navbar .contact-btn {
   display: flex;
+  /* Prevent text selection on button */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .navbar .contact-btn .inner {
@@ -234,27 +254,31 @@ body {
   transition: background-color 0.3s;
 }
 
-.navbar .contact-btn.group:hover .inner {
-  background-color: #1c1c21; 
-}
-
 .navbar .contact-btn .inner span {
   transition: color 0.3s;
 }
 
-.navbar .contact-btn.group:hover .inner span {
-  color: white;
+/* Only apply hover effects on devices that support true hover */
+@media (hover: hover) and (pointer: fine) {
+  .navbar .contact-btn:hover .inner {
+    background-color: #1c1c21; 
+  }
+
+  .navbar .contact-btn:hover .inner span {
+    color: white;
+  }
 }
 
-/* Mobile menu improvements */
-.navbar .fixed {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  padding-top: 5rem;
-  background-color: black;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+/* Ensure button resets properly on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .navbar .contact-btn:active .inner {
+    background-color: white;
+    color: black;
+  }
+  
+  .navbar .contact-btn:active .inner span {
+    color: black;
+  }
 }
 
 /* Button styles */
