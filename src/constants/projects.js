@@ -3,26 +3,26 @@ export const projects = [
     id: 1,
     title: "Psychology Blossom Chatbot",
     image: "/images/showcase/pb_chatbot.png",
-    description: "A sophisticated business enquiry chatbot designed for Psychology Blossom, providing 24/7 customer support and streamlined appointment booking. Built with modern web technologies and cloud infrastructure for maximum reliability and scalability.",
+    description: "An intelligent RAG-based chatbot built for Psychology Blossom, a Singapore-based counselling service. Designed to provide 24/7 client support, intelligent therapist matching, and scalable infrastructure for mental health services.",
     technologies: [
-      "JavaScript",
-      "Python", 
+      "Python",
       "Google Cloud Platform",
-      "Natural Language Processing",
-      "React",
-      "Node.js",
-      "Cloud Functions",
-      "Dialogflow"
+      "JavaScript",
+      "OpenAI API",
+      "Facebook AI Similarity Search (FAISS)",
+      "Github"
     ],
     features: [
       "24/7 automated customer support",
-      "Intelligent appointment scheduling",
-      "Multi-language support capabilities",
-      "Integration with existing business systems",
+      "Smart therapist matching via multi-factor filtering",
       "Real-time response optimization",
-      "Secure data handling and privacy protection",
-      "Analytics dashboard for business insights",
-      "Seamless handoff to human agents when needed"
+      "Multi-language support capabilities",
+      "Seamless handoff to human agents when needed",
+      "Secure, cloud-based architecture using GCP",
+      "Seamless handoff to human agents when needed",
+      "Custom-built RAG system for optimized Q&A",
+      "Reliable tool-calling framework with minimal LLM dependency",
+      "Fuzzy matching and persistent preference memory",
     ],
     liveUrl: "https://psychologyblossom.com/",
     githubUrl: "https://github.com/AsJayTee/PB-Chatbot"
@@ -31,16 +31,14 @@ export const projects = [
     id: 2,
     title: "Interactive 3D AI Avatars",
     image: "/images/showcase/3d_ai_avatar.png",
-    description: "An innovative project exploring the intersection of 3D graphics and artificial intelligence. Features lifelike avatars that can interact naturally with users through advanced motion capture, facial recognition, and real-time animation technologies.",
+    description: "An innovative project exploring the intersection of 3D graphics and Generative AI. Features lifelike avatars that can interact naturally with users through real-time animation technologies.",
     technologies: [
       "Three.js",
-      "WebGL",
-      "TensorFlow.js",
-      "Computer Vision",
       "React",
-      "WebRTC",
-      "MediaPipe",
-      "Blender"
+      "Blender",
+      "Web Speech API",
+      "JavaScript",
+      "HTML",
     ],
     features: [
       "Real-time facial expression mapping",
@@ -49,10 +47,8 @@ export const projects = [
       "Customizable avatar appearances",
       "Cross-platform compatibility",
       "Low-latency interaction system",
-      "AI-powered conversation capabilities",
-      "Motion capture integration"
-    ],
-    githubUrl: "https://github.com/AsJayTee/3d-ai-avatars"
+      "AI-powered conversation capabilities"
+    ]
   },
   {
     id: 3,
@@ -71,14 +67,11 @@ export const projects = [
     ],
     features: [
       "Advanced anomaly detection algorithms",
-      "Real-time consumption monitoring",
       "Historical pattern analysis",
       "ROC curve optimization for accuracy",
-      "Automated alert system",
-      "Interactive data visualization dashboard",
       "Ensemble model implementation",
       "Performance metrics tracking"
     ],
-    githubUrl: "https://github.com/AsJayTee/fraud-detection-analysis"
+    githubUrl: "https://github.com/AsJayTee/IT1244-Fraud-Analysis"
   }
 ];
