@@ -205,35 +205,35 @@ export const techStackImgs = [
     skills: [
       {
         skillName: "AWS",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/aws.png"
       },
       {
         skillName: "Google Cloud Platform",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/gcp.png"
       },
       {
         skillName: "Azure",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/azure.png"
       },
       {
         skillName: "Git",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/git.png"
       },
       {
         skillName: "Ubuntu",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/ubuntu.png"
       },
       {
         skillName: "NGINX",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/nginx.png"
       },
       {
         skillName: "GoDaddy",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/godaddy.png"
       },
       {
         skillName: "Hostinger",
-        imagePath: ""
+        imagePath: "/images/skills/cloud/hostinger.png"
       }
     ]
   }
