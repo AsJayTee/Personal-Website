@@ -125,47 +125,47 @@ export const techStackImgs = [
     skills: [
       {
         skillName: "React",
-        imagePath: ""
+        imagePath: "/images/skills/web/react.png"
       },
       {
         skillName: "Flask",
-        imagePath: ""
+        imagePath: "/images/skills/web/flask.png"
       },
       {
         skillName: "FastAPI",
-        imagePath: ""
+        imagePath: "/images/skills/web/fastapi.png"
       },
       {
         skillName: "Streamlit",
-        imagePath: ""
+        imagePath: "/images/skills/web/streamlit.png"
       },
       {
         skillName: "TailwindCSS",
-        imagePath: ""
+        imagePath: "/images/skills/web/tailwindcss.png"
       },
       {
         skillName: "GSAP",
-        imagePath: ""
+        imagePath: "/images/skills/web/gsap.png"
       },
       {
         skillName: "Three.js",
-        imagePath: ""
+        imagePath: "/images/skills/web/threejs.png"
       },
       {
         skillName: "npm",
-        imagePath: ""
+        imagePath: "/images/skills/web/npm.png"
       },
       {
         skillName: "Postman",
-        imagePath: ""
+        imagePath: "/images/skills/web/postman.png"
       },
       {
         skillName: "Pydantic",
-        imagePath: ""
+        imagePath: "/images/skills/web/pydantic.png"
       },
       {
         skillName: "Selenium",
-        imagePath: ""
+        imagePath: "/images/skills/web/selenium.png"
       }
     ]
   },
