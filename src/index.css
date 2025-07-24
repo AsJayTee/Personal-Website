@@ -960,45 +960,138 @@ section {
   }
 }
 
-/* Skill modal specific styles */
-.skill-modal .proficiency-bar {
+/* ===== SKILL MODAL STYLES ===== */
+
+/* Skills Logo Grid Layout */
+.skills-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .skills-logo-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .skills-logo-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Individual Skill Logo Items */
+.skill-logo-item {
   position: relative;
-  background: linear-gradient(90deg, transparent 0%, rgba(67, 204, 247, 0.1) 50%, transparent 100%);
-  animation: shimmer 2s infinite;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: rgba(51, 51, 51, 0.3);
+  border: 1px solid rgba(51, 51, 51, 0.5);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+.skill-logo-item:hover {
+  transform: translateY(-4px) scale(1.05);
+  border-color: rgba(67, 204, 247, 0.5);
+  background: rgba(67, 204, 247, 0.1);
 }
 
-/* Enhanced modal animations */
-.skill-modal .modal-content {
-  animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+/* Logo Container */
+.skill-logo-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(20px);
+/* Fallback Text Logo */
+.skill-fallback-logo {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 640px) {
+  .skill-fallback-logo {
+    font-size: 1rem;
   }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
+}
+
+/* Skill Name Overlay */
+.skill-name-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(23, 23, 32, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+
+.skill-logo-item:hover .skill-name-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Skill Name Text */
+.skill-name-text {
+  color: #d9ecff;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 0.5rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 640px) {
+  .skill-name-text {
+    font-size: 0.875rem;
   }
 }
 
-/* Proficiency level indicators */
-.proficiency-expert {
-  @apply bg-emerald-500/20 text-emerald-400 border-emerald-500/30;
+/* Hover Glow Effect */
+.skill-hover-glow {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #43ccf7, #7209b7);
+  border-radius: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
 }
 
-.proficiency-intermediate {
-  @apply bg-blue-500/20 text-blue-400 border-blue-500/30;
+.skill-logo-item:hover .skill-hover-glow {
+  opacity: 0.3;
 }
 
-.proficiency-familiar {
-  @apply bg-amber-500/20 text-amber-400 border-amber-500/30;
+/* Accessibility - Focus States */
+.skill-logo-item:focus-visible {
+  outline: 2px solid #43ccf7;
+  outline-offset: 2px;
+}
+
+.skill-logo-item:focus-visible .skill-name-overlay {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Smooth scrolling for skill section navigation */
@@ -1009,29 +1102,6 @@ section {
 
 .skills-nav-link:hover {
   color: #ffffff;
-}
-
-/* Accessibility improvements */
-.tech-card:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 2px;
-}
-
-.tech-card [role="button"]:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 2px;
-}
-
-/* Loading state for skill icons */
-.skill-icon-loading {
-  background: linear-gradient(90deg, #333333 25%, #444444 50%, #333333 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
 }
 
 /* Padding utility classes */
