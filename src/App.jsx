@@ -1,21 +1,24 @@
-import Hero from "./sections/Hero"
-import Navbar from "./sections/Navbar"
-import ShowcaseSection from "./sections/ShowcaseSection"
-import FeatureCards from "./sections/FeatureCards"
-import ExperienceSection from "./sections/ExperienceSection"
-import TechStack from "./sections/TechStack"
-import Testimonials from "./sections/Testimonials"
+import { Routes, Route } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
+import HomePage from "./pages/HomePage"
+import LoadingSpinner from "./components/LoadingSpinner"
+
+const AttributionsPage = lazy(() => import("./pages/AttributionsPage"))
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Hero />
-      <ShowcaseSection />
-      <FeatureCards />
-      <ExperienceSection />
-      <TechStack />
-      <Testimonials />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route 
+          path="/attributions" 
+          element={
+            <Suspense fallback={<LoadingSpinner message="Loading Attributions..." />}>
+              <AttributionsPage />
+            </Suspense>
+          } 
+        />
+      </Routes>
     </>
   )
 }
