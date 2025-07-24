@@ -5,35 +5,39 @@ export const techStackImgs = [
     skills: [
       {
         skillName: "Python",
-        imagePath: ""
+        imagePath: "images/skills/languages/python.png"
       },
       {
         skillName: "R",
-        imagePath: ""
+        imagePath: "images/skills/languages/r.png"
       },
       {
         skillName: "Java",
-        imagePath: ""
+        imagePath: "images/skills/languages/java.png"
       },
       {
         skillName: "Javascript",
-        imagePath: ""
+        imagePath: "images/skills/languages/javascript.png"
       },
       {
         skillName: "Typescript",
-        imagePath: ""
+        imagePath: "images/skills/languages/typescript.png"
+      },
+      {
+        skillName: "HTML",
+        imagePath: "images/skills/languages/html.png"
       },
       {
         skillName: "CSS",
-        imagePath: ""
+        imagePath: "images/skills/languages/css.png"
       },
       {
         skillName: "Markdown",
-        imagePath: ""
+        imagePath: "images/skills/languages/markdown.png"
       },
       {
         skillName: "JSON",
-        imagePath: ""
+        imagePath: "images/skills/languages/json.png"
       }
     ]
   },
