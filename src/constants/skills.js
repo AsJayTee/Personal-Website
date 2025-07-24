@@ -175,27 +175,27 @@ export const techStackImgs = [
     skills: [
       {
         skillName: "PostgreSQL",
-        imagePath: ""
+        imagePath: "/images/skills/database/postgresql.png"
       },
       {
         skillName: "SQLite",
-        imagePath: ""
+        imagePath: "/images/skills/database/sqlite.png"
       },
       {
         skillName: "Supabase",
-        imagePath: ""
+        imagePath: "/images/skills/database/supabase.png"
       },
       {
         skillName: "BigQuery",
-        imagePath: ""
+        imagePath: "/images/skills/database/bigquery.png"
       },
       {
         skillName: "Airtable",
-        imagePath: ""
+        imagePath: "/images/skills/database/airtable.png"
       },
       {
         skillName: "Fivetran",
-        imagePath: ""
+        imagePath: "/images/skills/database/fivetran.png"
       }
     ]
   },
