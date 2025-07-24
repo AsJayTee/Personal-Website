@@ -47,75 +47,75 @@ export const techStackImgs = [
     skills: [
       {
         skillName: "NumPy",
-        imagePath: ""
+        imagePath: "images/skills/ai/numpy.png"
       },
       {
         skillName: "Pandas",
-        imagePath: ""
+        imagePath: "images/skills/ai/pandas.png"
       },
       {
         skillName: "Tidyverse",
-        imagePath: ""
+        imagePath: "images/skills/ai/tidyverse.png"
       },
       {
         skillName: "Matplotlib",
-        imagePath: ""
+        imagePath: "images/skills/ai/matplotlib.png"
       },
       {
         skillName: "Plotly",
-        imagePath: ""
+        imagePath: "images/skills/ai/plotly.png"
       },
       {
         skillName: "Tableau",
-        imagePath: ""
+        imagePath: "images/skills/ai/tableau.png"
       },
       {
         skillName: "Jupyter Notebook",
-        imagePath: ""
+        imagePath: "images/skills/ai/jupyter.png"
       },
       {
         skillName: "Google Colab",
-        imagePath: ""
+        imagePath: "images/skills/ai/colab.png"
       },
       {
         skillName: "scikit-learn",
-        imagePath: ""
+        imagePath: "images/skills/ai/scikit-learn.png"
       },
       {
         skillName: "TensorFlow",
-        imagePath: ""
+        imagePath: "images/skills/ai/tensorflow.png"
       },
       {
         skillName: "Keras",
-        imagePath: ""
+        imagePath: "images/skills/ai/keras.png"
       },
       {
         skillName: "HuggingFace",
-        imagePath: ""
+        imagePath: "images/skills/ai/huggingface.png"
       },
       {
         skillName: "LangChain",
-        imagePath: ""
+        imagePath: "images/skills/ai/langchain.png"
       },
       {
         skillName: "LangGraph",
-        imagePath: ""
+        imagePath: "images/skills/ai/langgraph.png"
       },
       {
         skillName: "CrewAI",
-        imagePath: ""
+        imagePath: "images/skills/ai/crewai.png"
       },
       {
         skillName: "OpenAI",
-        imagePath: ""
+        imagePath: "images/skills/ai/openai.png"
       },
       {
         skillName: "Claude",
-        imagePath: ""
+        imagePath: "images/skills/ai/claude.png"
       },
       {
         skillName: "Anthropic",
-        imagePath: ""
+        imagePath: "images/skills/ai/anthropic.png"
       }
     ]
   },
