@@ -1,44 +1,37 @@
 export const testimonials = [
   {
-    name: "Esther Howard",
-    position: "@estherhoward",
+    name: "Alan Wilson",
+    position: "Internal Digital Head, CelcomDigi",
     review:
-      "I can't say enough good things about Adrian. He was able to take our complex project requirements and turn them into a seamless, functional website. His problem-solving abilities are outstanding.",
-    imgPath: "/images/client1.png",
+      "Siah Jin Thau's work has been nothing short of exemplary. They have consistently pushed the boundaries of AI, utilizing the latest LLM technologies to drive innovation and efficiency within out operations.",
+    imgPath: "/images/testimonials/alan-wilson.png",
   },
   {
-    name: "Wade Warren",
-    position: "@wadewarren",
+    name: "Anna Nikitenko",
+    position: "Analytics Head, Psychology Blossom",
     review:
-      "Working with Adrian was a fantastic experience. He transformed our outdated website into a modern, user-friendly platform. His attention to detail and commitment to quality are unmatched. Highly recommend him for any web dev projects.",
-    imgPath: "/images/client3.png",
+      "Jin Thau was a pleasure to work with. He understood our requirements perfectly and delivered a solution that exceeded our expectations. His skills in both frontend and backend dev are top-notch.",
+    imgPath: "/images/testimonials/anna-nikitenko.png",
   },
   {
-    name: "Guy Hawkins",
-    position: "@guyhawkins",
+    name: "Daisy Pham",
+    position: "Senior Lecturer, NUS",
     review:
-      "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-    imgPath: "/images/client2.png",
+      "I am confident that Siah Jin Thau will bring valuable skills, dedication, and enthusiasm to any future endeavor. He has proven to be a skilled teacher, a passionate learner, and a person of exceptional integrity. I wholeheartedly recommend him for any academic or professional opportunity he may pursue.",
+    imgPath: "/images/testimonials/daisy-pham.png",
   },
   {
-    name: "Marvin McKinney",
-    position: "@marvinmckinney",
+    name: "Matthew Sng",
+    position: "Managing Director, Advanced Dental",
     review:
-      "Adrian was a pleasure to work with. He turned our outdated website into a fresh, intuitive platform that's both modern and easy to navigate. Fantastic work overall.",
-    imgPath: "/images/client5.png",
+      "You stood out not just as an intern, but as one of the most self-driven and creative colleagues I've had the chance to work alongside.",
+    imgPath: "/images/testimonials/matthew-sng.png",
   },
   {
-    name: "Floyd Miles",
-    position: "@floydmiles",
+    name: "Dominic Tan",
+    position: "Technical Lead, Advanced Dental",
     review:
-      "Adrian's expertise in web development is truly impressive. He delivered a robust and scalable solution for our e-commerce site, and our online sales have significantly increased since the launch. He's a true professional!",
-    imgPath: "/images/client4.png",
-  },
-  {
-    name: "Albert Flores",
-    position: "@albertflores",
-    review:
-      "Adrian was a pleasure to work with. He understood our requirements perfectly and delivered a website that exceeded our expectations. His skills in both frontend and backend dev are top-notch.",
-    imgPath: "/images/client6.png",
-  },
+      "He is not only technically proficient in the full suite of data tools - from SQL, to Tableau and Python - but also puts himself in the users shoes and user journey consistently. What stands out about him is his communicativeness and willingness to learn. He is easy to work with, well liked by the team, fast and highly adaptable to new systems.",
+    imgPath: "/images/testimonials/dominic-tan.png",
+  }
 ];
