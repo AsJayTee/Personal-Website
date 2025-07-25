@@ -1,7 +1,7 @@
 export const testimonials = [
   {
     name: "Alan Wilson",
-    position: "Internal Digital Head, CelcomDigi",
+    position: "Digital Solutions Head, CelcomDigi",
     review:
       "Siah Jin Thau's work has been nothing short of exemplary. They have consistently pushed the boundaries of AI, utilizing the latest LLM technologies to drive innovation and efficiency within out operations.",
     imgPath: "/images/testimonials/alan-wilson.png",
