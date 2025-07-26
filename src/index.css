@@ -828,7 +828,7 @@ section {
 
 /* Section padding utility */
 .section-padding {
-  @apply py-20 md:py-32;
+  @apply py-12 md:py-20; 
 }
 
 /* Flex center utility */
@@ -1576,10 +1576,10 @@ section {
 
 /* Simple Footer - Replace existing .footer section in your CSS */
 .footer {
-  @apply mt-10 md:mt-20 px-5 md:px-20 xl:px-20 flex items-center justify-center;
-  color: #d9ecff; /* white-50 equivalent */
+  @apply mt-5 md:mt-10 px-5 md:px-20 xl:px-20 flex items-center justify-center;  /* Reduced from mt-10 md:mt-20 */
+  color: #d9ecff;
   background-color: black;
-  border-top: 1px solid #1c1c21; /* black-50 equivalent */
+  border-top: 1px solid #1c1c21;
   padding-top: 2rem;
   padding-bottom: 2rem;
   margin-bottom: 0;
