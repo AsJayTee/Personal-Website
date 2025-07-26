@@ -1662,3 +1662,103 @@ section {
     }
   }
 }
+
+/* ===== SKILLS CAROUSEL STYLES ===== */
+
+/* Main carousel container */
+.skills-carousel-container {
+  @apply relative w-full overflow-hidden;
+  margin-top: 2rem;
+}
+
+/* Carousel wrapper */
+.carousel-wrapper {
+  @apply relative w-full;
+  overflow: hidden;
+  padding: 1rem 0; /* Add vertical padding for scale effect */
+}
+
+/* Carousel track - contains all logos */
+.carousel-track {
+  @apply flex items-center gap-12;
+  white-space: nowrap;
+  will-change: transform;
+  padding: 0.5rem 0; /* Additional padding for hover scale */
+}
+
+/* Individual skill logo wrapper */
+.skill-logo-wrapper {
+  @apply relative flex-shrink-0 cursor-pointer;
+  transition: transform 0.3s ease;
+}
+
+.skill-logo-wrapper:hover {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+/* Skill logo container */
+.skill-logo {
+  @apply w-16 h-16 md:w-20 md:h-20 flex items-center justify-center;
+  filter: grayscale(100%) opacity(0.4);
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.skill-logo-wrapper:hover .skill-logo {
+  filter: grayscale(0%) opacity(1);
+}
+
+/* Skill image */
+.skill-image {
+  @apply w-full h-full object-contain;
+}
+
+/* Fallback for skills without images */
+.skill-fallback {
+  @apply w-full h-full flex items-center justify-center rounded-lg;
+  @apply bg-gradient-to-br from-gray-600 to-gray-800 text-white;
+  @apply text-lg md:text-xl font-bold;
+}
+
+/* Fade gradients */
+.carousel-fade-left,
+.carousel-fade-right {
+  @apply absolute top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none;
+}
+
+.carousel-fade-left {
+  @apply left-0;
+  background: linear-gradient(to right, #171720, transparent);
+}
+
+.carousel-fade-right {
+  @apply right-0;
+  background: linear-gradient(to left, #171720, transparent);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .carousel-track {
+    @apply gap-8;
+  }
+  
+  .skill-logo {
+    @apply w-14 h-14;
+  }
+  
+  .carousel-fade-left,
+  .carousel-fade-right {
+    @apply w-20;
+  }
+}
+
+/* Ensure smooth animation on all devices */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track {
+    animation: none !important;
+  }
+  
+  .skill-logo-wrapper:hover {
+    transform: none;
+  }
+}

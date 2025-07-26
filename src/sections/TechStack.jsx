@@ -1,6 +1,7 @@
 import React from 'react'
 import TitleHeader from '../components/TitleHeader'
 import SkillCards from '../components/SkillCards'
+import SkillsCarousel from '../components/SkillsCarousel'
 
 const TechStack = () => {
   return(
@@ -13,6 +14,9 @@ const TechStack = () => {
         
         {/* Skills Cards - Now using tech stack inspired design */}
         <SkillCards />
+        
+        {/* Skills Carousel - Horizontal scrolling logos */}
+        <SkillsCarousel />
       </div>
     </div>
   )
