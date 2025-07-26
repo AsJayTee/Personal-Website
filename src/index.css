@@ -1573,3 +1573,92 @@ section {
 #contact textarea::-webkit-scrollbar-thumb:hover {
   @apply bg-[#666666];
 }
+
+/* Simple Footer - Replace existing .footer section in your CSS */
+.footer {
+  @apply mt-10 md:mt-20 px-5 md:px-20 xl:px-20 flex items-center justify-center;
+  color: #d9ecff; /* white-50 equivalent */
+  background-color: black;
+  border-top: 1px solid #1c1c21; /* black-50 equivalent */
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-bottom: 0;
+
+  .footer-container {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-0 w-full items-center;
+  }
+
+  p {
+    @apply text-center md:text-start cursor-default;
+    font-size: 0.875rem;
+    color: #d9ecff; /* white-50 equivalent */
+  }
+
+  .socials {
+    @apply flex items-center justify-center gap-4;
+
+    .icon {
+      @apply flex justify-center items-center rounded-xl cursor-pointer transition-all duration-300;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid #1c1c21; /* black-50 equivalent */
+      background-color: #0e0e10; /* black-100 equivalent */
+    }
+
+    .icon:hover {
+      background-color: #1c1c21; /* black-50 equivalent */
+      border-color: #d9ecff; /* white-50 equivalent */
+    }
+
+    img {
+      @apply inline-block;
+      filter: brightness(0) invert(1); /* Makes icons white */
+    }
+
+    .icon:hover img {
+      filter: brightness(0) invert(1) opacity(0.8); /* Slightly dimmed on hover */
+    }
+  }
+
+  .back-to-top {
+    color: #d9ecff; /* white-50 equivalent */
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .back-to-top:hover {
+    color: white;
+    transform: translateY(-3px);
+  }
+
+  /* Links */
+  a {
+    color: #d9ecff; /* white-50 equivalent */
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: white;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .footer-container {
+      @apply gap-6;
+    }
+    
+    /* Stack attribution and copyright on mobile */
+    .footer-container > div:first-child,
+    .footer-container > div:last-child {
+      @apply text-center;
+    }
+    
+    .footer-container > div:last-child {
+      @apply flex-col gap-3;
+    }
+
+    .socials .icon {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}
