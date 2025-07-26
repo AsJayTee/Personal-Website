@@ -1320,3 +1320,183 @@ section {
     margin-bottom: 1rem;
   }
 }
+
+/* ===== CONTACT FORM STYLES ===== */
+
+/* Grid system for contact layout */
+.grid-12-cols {
+  @apply grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12;
+}
+
+/* Contact form container */
+#contact {
+  scroll-margin-top: -20px;
+}
+
+/* Form Labels */
+#contact label {
+  @apply block text-[#d9ecff] text-sm md:text-base font-medium mb-3;
+  letter-spacing: 0.025em;
+}
+
+/* Form Input Base Styles */
+#contact input,
+#contact textarea {
+  @apply w-full px-4 py-3 md:px-5 md:py-4;
+  @apply bg-[#2a2a2f] border border-[#404040];
+  @apply rounded-lg text-white placeholder-[#888888];
+  @apply transition-all duration-300 ease-out;
+  @apply focus:outline-none focus:ring-0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  #contact input,
+  #contact textarea {
+    font-size: 1rem;
+  }
+}
+
+/* Input Focus States - Very subtle */
+#contact input:focus,
+#contact textarea:focus {
+  @apply border-[#555555] bg-[#323238];
+  box-shadow: none;
+  transform: none;
+}
+
+/* Input Hover States */
+#contact input:hover:not(:focus),
+#contact textarea:hover:not(:focus) {
+  @apply border-[#555555] bg-[#2f2f35];
+}
+
+/* Textarea Specific Styles */
+#contact textarea {
+  @apply resize-y min-h-[120px];
+  font-family: inherit;
+}
+
+/* Placeholder Styling */
+#contact input::placeholder,
+#contact textarea::placeholder {
+  @apply text-[#888888];
+  font-style: italic;
+  transition: color 0.3s ease;
+}
+
+#contact input:focus::placeholder,
+#contact textarea:focus::placeholder {
+  @apply text-[#aaaaaa];
+}
+
+/* Send Message Button - Matching Navbar Contact Button Style */
+.cta-button {
+  @apply relative w-full h-14 md:h-16 overflow-hidden rounded-lg;
+  @apply bg-white text-black;
+  @apply transition-all duration-300 ease-out;
+  @apply flex items-center justify-center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* CTA Button Hover State - Matching Navbar Style */
+.cta-button:hover {
+  @apply bg-[#1c1c21];
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button:hover .text {
+  @apply text-white;
+}
+
+/* CTA Button Active State */
+.cta-button:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* CTA Button Disabled State */
+.cta-button:disabled {
+  @apply opacity-70 cursor-not-allowed bg-white text-black;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:disabled .text {
+  @apply text-black;
+}
+
+/* Loading State Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.cta-button:disabled .text {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1279px) {
+  .grid-12-cols {
+    gap: 2rem;
+  }
+  
+  #contact .xl\:col-span-5,
+  #contact .xl\:col-span-7 {
+    @apply col-span-1;
+  }
+}
+
+@media (max-width: 768px) {
+  #contact input,
+  #contact textarea {
+    @apply px-4 py-3;
+  }
+  
+  .cta-button {
+    @apply h-12;
+  }
+  
+  .cta-button .text {
+    @apply text-base;
+  }
+}
+
+/* Accessibility Improvements */
+#contact input:focus-visible,
+#contact textarea:focus-visible {
+  outline: 2px solid #43ccf7;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for all form elements */
+#contact input,
+#contact textarea,
+#contact label {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbar for textarea */
+#contact textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+#contact textarea::-webkit-scrollbar-track {
+  @apply bg-[#2a2a2f] rounded;
+}
+
+#contact textarea::-webkit-scrollbar-thumb {
+  @apply bg-[#555555] rounded;
+}
+
+#contact textarea::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#666666];
+}
