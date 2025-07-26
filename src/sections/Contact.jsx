@@ -13,6 +13,10 @@ const Contact = () => {
     email: "",
     message: "",
   });
+  const [messageStatus, setMessageStatus] = useState({
+    type: '', // 'success' or 'error'
+    text: ''
+  });
 
   // Check if user is on desktop (xl breakpoint and above)
   const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
@@ -20,11 +24,17 @@ const Contact = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+    
+    // Clear messages when user starts typing
+    if (messageStatus.text) {
+      setMessageStatus({ type: '', text: '' });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Show loading state
+    setLoading(true);
+    setMessageStatus({ type: '', text: '' }); // Clear any previous messages
 
     try {
       await emailjs.sendForm(
@@ -34,12 +44,31 @@ const Contact = () => {
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
 
-      // Reset form and stop loading
+      // Reset form and show success message
       setForm({ name: "", email: "", message: "" });
+      setMessageStatus({
+        type: 'success',
+        text: 'Thank you! Your message has been sent successfully. I\'ll get back to you soon!'
+      });
+
+      // Auto-clear success message after 5 seconds
+      setTimeout(() => {
+        setMessageStatus({ type: '', text: '' });
+      }, 5000);
+
     } catch (error) {
-      console.error("EmailJS Error:", error); // Optional: show toast
+      console.error("EmailJS Error:", error);
+      setMessageStatus({
+        type: 'error',
+        text: 'Oops! Something went wrong. Please try again or reach out to me directly.'
+      });
+
+      // Auto-clear error message after 8 seconds
+      setTimeout(() => {
+        setMessageStatus({ type: '', text: '' });
+      }, 8000);
     } finally {
-      setLoading(false); // Always stop loading, even on error
+      setLoading(false);
     }
   };
 
@@ -117,6 +146,37 @@ const Contact = () => {
             </div>
           )}
         </div>
+
+        {/* Status Message Popup */}
+        {messageStatus.text && (
+          <div className={`message-popup ${messageStatus.type === 'success' ? 'message-popup-success' : 'message-popup-error'}`}>
+            <div className="message-popup-content">
+              <div className="message-popup-icon">
+                {messageStatus.type === 'success' ? (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )}
+              </div>
+              <div className="message-popup-text">
+                <p>{messageStatus.text}</p>
+              </div>
+              <button 
+                onClick={() => setMessageStatus({ type: '', text: '' })}
+                className="message-popup-close"
+                aria-label="Close notification"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
