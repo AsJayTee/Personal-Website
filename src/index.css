@@ -1122,11 +1122,11 @@ section {
 }
 
 #skills {
-  scroll-margin-top: -20px; 
+  scroll-margin-top: 20px; 
 }
 
 #testimonials {
-  scroll-margin-top: -20px; 
+  scroll-margin-top: 20px; 
 }
 
 /* ===== TESTIMONIALS SECTION STYLES ===== */
@@ -1330,7 +1330,7 @@ section {
 
 /* Contact form container */
 #contact {
-  scroll-margin-top: -20px;
+  scroll-margin-top: 20px;
 }
 
 /* Form Labels */
