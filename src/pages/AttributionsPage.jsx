@@ -1,9 +1,34 @@
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, useLayoutEffect } from "react"
 import TitleHeader from "../components/TitleHeader"
 import { attributions } from "../constants/attributions"
 
 const AttributionsPage = () => {
+  // Fix 1: Force instant scroll to top BEFORE component renders
+  useLayoutEffect(() => {
+    // Method 1: Disable smooth scroll temporarily and scroll instantly
+    const originalScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    
+    // Method 2: Multiple instant scroll methods for maximum reliability
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0; // For older browsers
+    
+    // Method 3: Restore original scroll behavior after a brief moment
+    const timeoutId = setTimeout(() => {
+      document.documentElement.style.scrollBehavior = originalScrollBehavior;
+      
+      // Final safety scroll in case anything shifted
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, 50);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      document.documentElement.style.scrollBehavior = originalScrollBehavior;
+    };
+  }, []);
+
   // Helper function to render links
   const renderLink = (item) => {
     if (Array.isArray(item) && item.length === 2) {
@@ -30,19 +55,23 @@ const AttributionsPage = () => {
         {/* Icon preview */}
         {item.path && (
           <div className="flex-shrink-0 flex items-center justify-center">
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-[#1a1a1a] rounded-lg p-3 border border-[#444444] overflow-hidden">
+            {/* Fix 2: Set explicit dimensions to prevent layout shift */}
+            <div className="w-16 h-16 md:w-20 md:h-20 bg-[#1a1a1a] rounded-lg p-3 border border-[#444444] overflow-hidden flex items-center justify-center">
               {!imageError ? (
                 <img 
                   src={item.path} 
                   alt="Icon preview" 
                   className="w-full h-full object-contain"
-                  loading="lazy"
+                  // Fix 3: Remove lazy loading to prevent layout shifts
+                  // loading="lazy" 
                   onError={() => setImageError(true)}
+                  // Fix 4: Add explicit dimensions
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-[#666666]">
                   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z" />
                   </svg>
                 </div>
               )}
@@ -77,7 +106,8 @@ const AttributionsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#171720] py-20">
+    // Fix 5: Add top-level container with explicit positioning
+    <div className="min-h-screen bg-[#171720] py-20" style={{ scrollMarginTop: 0 }}>
       {/* Back Button */}
       <div className="container mx-auto px-5 md:px-20 max-w-6xl mb-8">
         <Link 
