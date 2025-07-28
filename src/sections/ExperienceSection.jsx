@@ -2,7 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { useMediaQuery } from 'react-responsive';
 import TitleHeader from '../components/TitleHeader';
+import ExperienceModal from '../components/ExperienceModal';
 import { experiences } from '../constants/experiences';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,6 +17,26 @@ const ExperienceSection = () => {
   const nodeRefs = useRef([]);
   const cardRefs = useRef([]);
   const [nodePositions, setNodePositions] = useState([]);
+  
+  // Modal state management
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedExperience, setSelectedExperience] = useState(null);
+  
+  // Mobile detection
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
+  // Modal handlers
+  const handleExperienceClick = (experience) => {
+    if (isMobile) {
+      setSelectedExperience(experience);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedExperience(null);
+  };
 
   // Set CSS custom properties for theming
   useEffect(() => {
@@ -76,7 +98,7 @@ const ExperienceSection = () => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '-15% 0px -15% 0px', // Balanced margins for better exit/enter timing
+      rootMargin: '-15% 0px -15% 0px',
       threshold: 0.1
     };
 
@@ -87,21 +109,17 @@ const ExperienceSection = () => {
           const node = nodeRefs.current[index];
           
           if (entry.isIntersecting) {
-            // Element is entering viewport
             entry.target.setAttribute('data-visible', 'true');
             if (node) {
               node.setAttribute('data-visible', 'true');
-              // Add glow effect after transition
               setTimeout(() => {
                 node.style.boxShadow = `0 0 30px ${experiences[index].themeColor}, 0 0 60px ${experiences[index].themeColor}40`;
               }, 300);
             }
           } else {
-            // Element is leaving viewport
             entry.target.setAttribute('data-visible', 'false');
             if (node) {
               node.setAttribute('data-visible', 'false');
-              // Reset glow effect
               node.style.boxShadow = `0 0 20px ${experiences[index].themeColor}`;
             }
           }
@@ -109,7 +127,6 @@ const ExperienceSection = () => {
       });
     }, observerOptions);
 
-    // Observe all experience cards
     experienceRefs.current.forEach(ref => {
       if (ref) observer.observe(ref);
     });
@@ -119,7 +136,6 @@ const ExperienceSection = () => {
 
   // Timeline animation with optimized color interpolation
   useGSAP(() => {
-    // Helper function to interpolate between colors
     const interpolateColor = (color1, color2, factor) => {
       const hexToRgb = (hex) => {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -140,14 +156,12 @@ const ExperienceSection = () => {
       return `rgb(${result.r}, ${result.g}, ${result.b})`;
     };
 
-    // Pre-calculate color stops for better performance
     const colorStops = experiences.map((exp, index) => ({
       position: index / (experiences.length - 1),
       color: exp.themeColor,
       secondary: exp.secondaryColor
     }));
 
-    // Timeline animation - only handles the line growth and color
     ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top center",
@@ -156,17 +170,14 @@ const ExperienceSection = () => {
       onUpdate: (self) => {
         const progress = self.progress;
         
-        // Animate timeline scale
         gsap.to(timelineLineRef.current, {
           scaleY: progress,
           duration: 0.1,
           ease: "none"
         });
 
-        // Calculate current color based on progress
         let currentColor = experiences[0].themeColor;
         
-        // Find which color segment we're in
         for (let i = 0; i < colorStops.length - 1; i++) {
           const start = colorStops[i].position;
           const end = colorStops[i + 1].position;
@@ -182,7 +193,6 @@ const ExperienceSection = () => {
           }
         }
 
-        // Apply gradient with current color
         const gradientStop = Math.max(20, Math.min(80, progress * 100));
         const gradient = `linear-gradient(
           0deg,
@@ -196,7 +206,6 @@ const ExperienceSection = () => {
       }
     });
 
-    // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.trigger === sectionRef.current) {
@@ -205,6 +214,104 @@ const ExperienceSection = () => {
       });
     };
   }, []);
+
+  // Render simplified mobile card
+  const renderMobileCard = (exp, index) => (
+    <div
+      ref={el => cardRefs.current[index] = el}
+      className="experience-card-mobile"
+      onClick={() => handleExperienceClick(exp)}
+      style={{
+        '--theme-primary': exp.themeColor,
+        '--theme-secondary': exp.secondaryColor
+      }}
+    >
+      {/* Company Badge */}
+      <div 
+        className="company-badge-mobile"
+        style={{
+          background: `linear-gradient(135deg, ${exp.themeColor}, ${exp.secondaryColor})`
+        }}
+      >
+        {exp.companyName}
+      </div>
+      
+      {/* Role Title */}
+      <h3 className="role-title-mobile">{exp.title}</h3>
+      
+      {/* Date */}
+      <p className="date-mobile">📅 {exp.date}</p>
+      
+      {/* Show More Indicator */}
+      <div className="show-more-indicator">
+        <span>Tap for details</span>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    </div>
+  );
+
+  // Render full desktop card
+  const renderDesktopCard = (exp, index) => (
+    <div 
+      ref={el => cardRefs.current[index] = el}
+      className="experience-card-content lg:ml-8"
+      style={{
+        '--theme-primary': exp.themeColor,
+        '--theme-secondary': exp.secondaryColor
+      }}
+    >
+      {/* Header */}
+      <div className="experience-header">
+        <div>
+          <div className="company-badge mb-4">
+            {exp.companyName}
+          </div>
+          <h3 className="experience-title">{exp.title}</h3>
+          <p className="experience-date">📅 {exp.date}</p>
+        </div>
+      </div>
+
+      {/* Responsibilities */}
+      <div className="responsibilities-section">
+        <h4 className="responsibilities-title">Key Responsibilities</h4>
+        <ul className="responsibilities-list">
+          {exp.responsibilities.map((responsibility, idx) => (
+            <li key={idx} className="responsibility-item">
+              <div className="responsibility-bullet" />
+              <span>{responsibility}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Achievements */}
+      {exp.achievements && exp.achievements.length > 0 && (
+        <div className="achievements-section">
+          <h4 className="achievements-title">Key Achievements</h4>
+          <ul className="achievements-list">
+            {exp.achievements.map((achievement, idx) => (
+              <li key={idx} className="achievement-item">
+                <svg 
+                  className="achievement-icon" 
+                  fill="currentColor" 
+                  viewBox="0 0 20 20"
+                >
+                  <path 
+                    fillRule="evenodd" 
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" 
+                    clipRule="evenodd" 
+                  />
+                </svg>
+                <span>{achievement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <section 
@@ -260,68 +367,19 @@ const ExperienceSection = () => {
                   marginTop: index === 0 ? '0' : '8rem'
                 }}
               >
-                <div 
-                  ref={el => cardRefs.current[index] = el}
-                  className="experience-card-content lg:ml-8"
-                  style={{
-                    '--theme-primary': exp.themeColor,
-                    '--theme-secondary': exp.secondaryColor
-                  }}
-                >
-                  {/* Header */}
-                  <div className="experience-header">
-                    <div>
-                      <div className="company-badge mb-4">
-                        {exp.companyName}
-                      </div>
-                      <h3 className="experience-title">{exp.title}</h3>
-                      <p className="experience-date">📅 {exp.date}</p>
-                    </div>
-                  </div>
-
-                  {/* Responsibilities */}
-                  <div className="responsibilities-section">
-                    <h4 className="responsibilities-title">Key Responsibilities</h4>
-                    <ul className="responsibilities-list">
-                      {exp.responsibilities.map((responsibility, idx) => (
-                        <li key={idx} className="responsibility-item">
-                          <div className="responsibility-bullet" />
-                          <span>{responsibility}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Achievements */}
-                  {exp.achievements && exp.achievements.length > 0 && (
-                    <div className="achievements-section">
-                      <h4 className="achievements-title">Key Achievements</h4>
-                      <ul className="achievements-list">
-                        {exp.achievements.map((achievement, idx) => (
-                          <li key={idx} className="achievement-item">
-                            <svg 
-                              className="achievement-icon" 
-                              fill="currentColor" 
-                              viewBox="0 0 20 20"
-                            >
-                              <path 
-                                fillRule="evenodd" 
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" 
-                                clipRule="evenodd" 
-                              />
-                            </svg>
-                            <span>{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+                {isMobile ? renderMobileCard(exp, index) : renderDesktopCard(exp, index)}
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Experience Modal for Mobile */}
+      <ExperienceModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        experience={selectedExperience}
+      />
     </section>
   );
 };
