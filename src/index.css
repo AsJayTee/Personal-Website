@@ -444,7 +444,7 @@ section {
 
 /* Prevent layout shift during loading */
 .hero-3d-layout > div {
-  contain: layout style paint;
+  contain: layout style; /* Less restrictive than strict containment */
   /* Ensure stable dimensions on mobile */
   width: 100%;
   height: 100%;
@@ -470,15 +470,9 @@ section {
   }
   
   .hero-3d-layout > div {
-    /* Additional stability measures */
-    contain: strict;
-    transform: translateZ(0); /* Force GPU acceleration */
-  }
-  
-  /* Prevent viewport changes from affecting layout */
-  .hero-layout {
-    contain: layout;
-    will-change: auto; /* Prevent unnecessary repaints */
+    /* Light GPU acceleration without strict containment */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 }
 
