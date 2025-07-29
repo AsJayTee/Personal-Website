@@ -25,35 +25,6 @@ html, body {
   position: relative;
 }
 
-/* Mobile-specific viewport stabilization */
-@supports (-webkit-touch-callout: none) {
-  /* iOS Safari specific */
-  html, body {
-    height: -webkit-fill-available;
-  }
-  
-  /* Prevent viewport jumping on mobile */
-  body {
-    min-height: -webkit-fill-available;
-  }
-}
-
-/* Prevent layout shifts during mobile scrolling */
-@media (max-width: 767px) {
-  html {
-    /* Use 100vh and ignore dynamic viewport changes */
-    --viewport-height: 100vh;
-  }
-  
-  body {
-    /* Fixed positioning context to prevent shifts */
-    position: relative;
-    overflow-x: hidden;
-    /* Ensure consistent height */
-    min-height: var(--viewport-height);
-  }
-}
-
 /* Prevent horizontal scroll on all devices */
 body {
   overflow-x: hidden;
@@ -444,7 +415,6 @@ section {
 
 /* Prevent layout shift during loading */
 .hero-3d-layout > div {
-  contain: layout style; /* Less restrictive than strict containment */
   /* Ensure stable dimensions on mobile */
   width: 100%;
   height: 100%;
@@ -487,9 +457,15 @@ section {
 @supports (-webkit-touch-callout: none) {
   /* Target mobile Safari specifically */
   @media (max-width: 768px) {
-    .hero-layout,
+    .hero-layout {
+      /* Keep hero layout at 600px */
+      height: 600px !important;
+      max-height: 600px !important;
+      min-height: 600px !important;
+    }
+    
     .hero-3d-layout {
-      /* Prevent any viewport-based resizing */
+      /* Keep 3D layout at 450px to match mobile rules */
       height: 450px !important;
       max-height: 450px !important;
       min-height: 450px !important;
@@ -662,7 +638,6 @@ section {
 /* Timeline Container and Layout */
 .timeline-container {
   @apply relative w-full max-w-7xl mx-auto;
-  contain: layout style;
 }
 
 .timeline-wrapper {
@@ -767,7 +742,6 @@ section {
   @apply bg-[#1a1a1a] border border-[#333333] rounded-xl p-6 lg:p-8;
   margin-left: 50%;
   margin-right: 1rem;
-  contain: layout style paint;
 }
 
 @media (max-width: 1024px) {
@@ -1182,11 +1156,6 @@ section {
 }
 
 /* ===== TESTIMONIALS SECTION STYLES ===== */
-
-/* Testimonials Container */
-.testimonials-container {
-  contain: layout style;
-}
 
 /* Testimonials Grid - Masonry Layout */
 .testimonials-grid {
