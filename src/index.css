@@ -877,15 +877,25 @@ section {
   @apply absolute left-0 bottom-[-100%] w-full h-full bg-[#2D3240] group-hover:bottom-0 transition-all duration-700;
 }
 
-/* Tech Card Content - Main container with better text positioning */
+/* Tech Card Content - Main container with fixed heights for mobile stability */
 .tech-card-content {
-  @apply flex flex-col justify-between items-center xl:gap-3 xl:h-[50vh] h-[40vh] overflow-hidden relative z-10 group-hover:cursor-grab;
+  @apply flex flex-col justify-between items-center xl:gap-3 overflow-hidden relative z-10 group-hover:cursor-grab;
+  /* Replace viewport units with fixed heights */
+  height: 320px; /* Fixed height for mobile (was h-[40vh]) */
   padding-top: 2rem;
   padding-bottom: 3rem; /* More bottom padding to prevent text clipping */
 
   & p {
     @apply text-sm xl:text-base font-semibold text-[#d9ecff] text-center; /* Smaller text */
     margin-bottom: 0; /* Remove default margin */
+  }
+}
+
+/* Desktop gets larger fixed height */
+@media (min-width: 1280px) {
+  .tech-card-content {
+    height: 400px; /* Fixed height for desktop (was xl:h-[50vh]) */
+    gap: 1rem;
   }
 }
 
@@ -907,10 +917,10 @@ section {
   transform: translateY(6px);
 }
 
-/* Responsive adjustments for tech cards */
+/* Responsive adjustments for tech cards - Fixed heights for mobile stability */
 @media (max-width: 1024px) {
   .tech-card-content {
-    height: 35vh;
+    height: 280px; /* Fixed height (was 35vh) */
     gap: 1rem;
     padding-top: 1.5rem;
     padding-bottom: 2.5rem;
@@ -936,7 +946,7 @@ section {
 
 @media (max-width: 768px) {
   .tech-card-content {
-    height: 30vh;
+    height: 240px; /* Fixed height (was 30vh) */
     gap: 0.75rem;
     padding-top: 1.25rem;
     padding-bottom: 2rem;
@@ -962,7 +972,7 @@ section {
 
 @media (max-width: 480px) {
   .tech-card-content {
-    height: 25vh;
+    height: 200px; /* Fixed height (was 25vh) */
     gap: 0.5rem;
     padding-top: 1rem;
     padding-bottom: 1.5rem;
