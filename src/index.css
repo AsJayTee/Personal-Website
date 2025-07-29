@@ -21,6 +21,37 @@ html, body {
   overscroll-behavior-y: smooth;
   -webkit-overflow-scrolling: touch;
   min-height: 100%;
+  /* Prevent mobile viewport shifts */
+  position: relative;
+}
+
+/* Mobile-specific viewport stabilization */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific */
+  html, body {
+    height: -webkit-fill-available;
+  }
+  
+  /* Prevent viewport jumping on mobile */
+  body {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Prevent layout shifts during mobile scrolling */
+@media (max-width: 767px) {
+  html {
+    /* Use 100vh and ignore dynamic viewport changes */
+    --viewport-height: 100vh;
+  }
+  
+  body {
+    /* Fixed positioning context to prevent shifts */
+    position: relative;
+    overflow-x: hidden;
+    /* Ensure consistent height */
+    min-height: var(--viewport-height);
+  }
 }
 
 /* Prevent horizontal scroll on all devices */
@@ -35,9 +66,27 @@ body {
   overflow-x: hidden;
 }
 
-/* Hero section improvements */
+/* Hero section improvements - Fixed for mobile viewport stability */
 .hero-layout {
-  @apply relative z-10 xl:mt-20 mt-32 md:h-dvh h-[80vh] flex xl:items-center items-start justify-center;
+  @apply relative z-10 xl:mt-20 mt-32 flex xl:items-center items-start justify-center;
+  /* Use fixed heights instead of viewport units to prevent mobile browser UI shifts */
+  height: 600px; /* Fixed height for mobile */
+}
+
+/* Desktop uses larger fixed height */
+@media (min-width: 768px) {
+  .hero-layout {
+    height: 100vh;
+    /* Use 100vh instead of dvh for stability */
+  }
+}
+
+/* Prevent layout shifts on mobile by using fixed viewport height */
+@media (max-width: 767px) {
+  .hero-layout {
+    height: 600px; /* Consistent height regardless of browser UI */
+    min-height: 600px;
+  }
 }
 
 .hero-text {
@@ -51,9 +100,34 @@ body {
 }
 
 .hero-3d-layout {
-  @apply xl:w-[70%] w-full h-[115%] min-h-[50vh] absolute xl:-top-20 top-24 xl:-right-20 right-0;
+  @apply xl:w-[70%] w-full absolute xl:-top-20 top-24 xl:-right-20 right-0;
+  /* Use fixed heights instead of percentages to prevent mobile shifts */
+  height: 600px; /* Fixed height for mobile */
   /* Ensure 3D container doesn't interfere with page scroll */
   pointer-events: none;
+}
+
+/* Desktop 3D layout */
+@media (min-width: 1280px) {
+  .hero-3d-layout {
+    height: 115%; /* Keep percentage on desktop where it's more stable */
+    min-height: 50vh;
+  }
+}
+
+/* Tablet and mobile 3D layout - use fixed heights */
+@media (max-width: 1279px) {
+  .hero-3d-layout {
+    height: 500px; /* Fixed height */
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-3d-layout {
+    height: 450px; /* Slightly smaller on mobile */
+    min-height: 450px;
+  }
 }
 
 /* Enable pointer events only on the canvas child */
@@ -371,17 +445,67 @@ section {
 /* Prevent layout shift during loading */
 .hero-3d-layout > div {
   contain: layout style paint;
+  /* Ensure stable dimensions on mobile */
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-/* Mobile-specific improvements */
+/* Mobile-specific improvements and viewport stability */
 @media (max-width: 768px) {
   body {
     -webkit-text-size-adjust: 100%;
+    /* Prevent any potential shifts */
+    position: relative;
+    overflow-x: hidden;
   }
   
   .hero-3d-layout {
-    /* Reduce 3D container size on mobile to prevent scroll issues */
-    max-height: 60vh;
+    /* Prevent container from growing/shrinking */
+    overflow: hidden;
+    /* Ensure consistent clipping */
+    clip-path: inset(20% 0 11% 0);
+  }
+  
+  .hero-3d-layout > div {
+    /* Additional stability measures */
+    contain: strict;
+    transform: translateZ(0); /* Force GPU acceleration */
+  }
+  
+  /* Prevent viewport changes from affecting layout */
+  .hero-layout {
+    contain: layout;
+    will-change: auto; /* Prevent unnecessary repaints */
+  }
+}
+
+@media (min-width: 769px) {
+  .hero-3d-layout > div {
+    overflow: hidden;
+    clip-path: inset(0 0 0 15%);
+  }
+}
+
+/* Additional mobile Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Target mobile Safari specifically */
+  @media (max-width: 768px) {
+    .hero-layout,
+    .hero-3d-layout {
+      /* Prevent any viewport-based resizing */
+      height: 450px !important;
+      max-height: 450px !important;
+      min-height: 450px !important;
+    }
+    
+    /* Ensure canvas maintains fixed size */
+    .hero-3d-layout canvas {
+      height: 450px !important;
+      max-height: 450px !important;
+    }
   }
 }
 
@@ -389,20 +513,6 @@ section {
 @supports (scroll-behavior: smooth) {
   html {
     scroll-behavior: smooth;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-3d-layout > div {
-    overflow: hidden;
-    clip-path: inset(20% 0 11% 0); /* Crops 20% from the top */
-  }
-}
-
-@media (min-width: 769px) {
-  .hero-3d-layout > div {
-    overflow: hidden;
-    clip-path: inset(0 0 0 15%); /* Crops 15% from the left */
   }
 }
 
@@ -417,11 +527,25 @@ section {
     @apply h-full flex flex-col justify-between xl:w-[60%];
 
     .image-wrapper {
-      @apply xl:h-[70vh] md:h-[50vh] h-96 relative;
+      @apply xl:h-[70vh] md:h-[50vh] h-96 relative overflow-hidden rounded-xl;
       max-height: 70vh;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      will-change: box-shadow, transform;
 
       img {
-        @apply w-full h-full object-cover rounded-xl absolute inset-0;
+        @apply w-full h-full object-cover absolute inset-0;
+      }
+
+      /* Simplified hover effects - lift and glow only */
+      &.cursor-pointer:hover {
+        box-shadow: 0 8px 32px rgba(67, 204, 247, 0.3), 
+                    0 0 0 1px rgba(67, 204, 247, 0.2);
+        transform: translateY(-2px);
+      }
+
+      &.cursor-pointer:active {
+        transform: translateY(0px);
+        box-shadow: 0 4px 16px rgba(67, 204, 247, 0.2);
       }
     }
 
@@ -442,11 +566,25 @@ section {
     @apply flex md:flex-row flex-col xl:flex-col gap-10 xl:w-[40%];
 
     .image-wrapper {
-      @apply xl:h-[37vh] md:h-52 lg:h-72 h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0;
+      @apply xl:h-[37vh] md:h-52 lg:h-72 h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0 overflow-hidden;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      will-change: box-shadow, transform;
+
+      /* Simplified hover effects - lift and glow only */
+      &.cursor-pointer:hover {
+        box-shadow: 0 6px 24px rgba(114, 9, 183, 0.25), 
+                    0 0 0 1px rgba(114, 9, 183, 0.15);
+        transform: translateY(-1px);
+      }
+
+      &.cursor-pointer:active {
+        transform: translateY(0px);
+        box-shadow: 0 3px 12px rgba(114, 9, 183, 0.15);
+      }
     }
 
     img {
-      @apply w-full h-full object-contain rounded-xl;
+      @apply w-full h-full object-contain;
     }
 
     h2 {
@@ -741,86 +879,6 @@ section {
     opacity: 0;
     transition: transform 0.35s ease-in, 
                 opacity 0.35s ease-in;
-  }
-}
-
-/* ===== PROJECT SHOWCASE HOVER EFFECTS ===== */
-/* Simplified hover effects - lift and glow only */
-
-.app-showcase {
-  @apply w-full px-5 md:px-20 py-10 md:py-20 flex items-center justify-center;
-
-  .showcaselayout {
-    @apply flex xl:flex-row flex-col gap-10 justify-between;
-  }
-
-  .first-project-wrapper {
-    @apply h-full flex flex-col justify-between xl:w-[60%];
-
-    .image-wrapper {
-      @apply xl:h-[70vh] md:h-[50vh] h-96 relative overflow-hidden rounded-xl;
-      max-height: 70vh;
-      transition: box-shadow 0.2s ease, transform 0.2s ease;
-      will-change: box-shadow, transform;
-
-      img {
-        @apply w-full h-full object-cover absolute inset-0;
-      }
-
-      /* Simplified hover effects - lift and glow only */
-      &.cursor-pointer:hover {
-        box-shadow: 0 8px 32px rgba(67, 204, 247, 0.3), 
-                    0 0 0 1px rgba(67, 204, 247, 0.2);
-        transform: translateY(-2px);
-      }
-
-      &.cursor-pointer:active {
-        transform: translateY(0px);
-        box-shadow: 0 4px 16px rgba(67, 204, 247, 0.2);
-      }
-    }
-
-    .text-content {
-      @apply space-y-5 mt-5;
-
-      .badges {
-        @apply flex gap-2 mb-4;
-      }
-
-      h2 {
-        @apply text-2xl md:text-3xl lg:text-4xl font-bold;
-      }
-    }
-  }
-
-  .project-list-wrapper {
-    @apply flex md:flex-row flex-col xl:flex-col gap-10 xl:w-[40%];
-
-    .image-wrapper {
-      @apply xl:h-[37vh] md:h-52 lg:h-72 h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0 overflow-hidden;
-      transition: box-shadow 0.2s ease, transform 0.2s ease;
-      will-change: box-shadow, transform;
-
-      /* Simplified hover effects - lift and glow only */
-      &.cursor-pointer:hover {
-        box-shadow: 0 6px 24px rgba(114, 9, 183, 0.25), 
-                    0 0 0 1px rgba(114, 9, 183, 0.15);
-        transform: translateY(-1px);
-      }
-
-      &.cursor-pointer:active {
-        transform: translateY(0px);
-        box-shadow: 0 3px 12px rgba(114, 9, 183, 0.15);
-      }
-    }
-
-    img {
-      @apply w-full h-full object-contain;
-    }
-
-    h2 {
-      @apply text-lg md:text-xl lg:text-2xl font-semibold mt-5;
-    }
   }
 }
 
