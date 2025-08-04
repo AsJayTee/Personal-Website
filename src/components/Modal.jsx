@@ -178,7 +178,10 @@ const Modal = ({
     <div
       ref={modalRef}
       className="fixed inset-0 z-[9999] items-center justify-center p-4"
-      style={{ display: shouldShow ? 'flex' : 'none' }}
+      style={{ 
+        display: shouldShow ? 'flex' : 'none',
+        pointerEvents: shouldShow ? 'auto' : 'none'
+      }}
     >
       {/* Backdrop */}
       <div
