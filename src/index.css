@@ -37,67 +37,204 @@ body {
   overflow-x: hidden;
 }
 
-/* Hero section improvements - Fixed for mobile viewport stability */
+/* Hero section improvements - Orientation-based layout */
 .hero-layout {
-  @apply relative z-10 xl:mt-20 mt-32 flex xl:items-center items-start justify-center;
+  @apply relative z-10 mt-32 flex items-start justify-center;
   /* Use fixed heights instead of viewport units to prevent mobile browser UI shifts */
   height: 600px; /* Fixed height for mobile */
 }
 
-/* Desktop uses larger fixed height */
-@media (min-width: 768px) {
+/* Mobile devices (small screens) - always use mobile layout */
+@media (max-width: 768px) {
   .hero-layout {
-    height: 100vh;
-    /* Use 100vh instead of dvh for stability */
-  }
-}
-
-/* Prevent layout shifts on mobile by using fixed viewport height */
-@media (max-width: 767px) {
-  .hero-layout {
-    height: 600px; /* Consistent height regardless of browser UI */
+    height: 600px;
     min-height: 600px;
   }
 }
 
+/* Tablet and larger screens - orientation-based layout with FIXED heights */
+@media (min-width: 769px) and (max-width: 1279px) {
+  .hero-layout {
+    /* Use FIXED heights instead of 100vh to prevent browser UI shifts */
+    height: 700px; /* Fixed height for all tablets */
+  }
+  
+  /* Portrait orientation (height > width) - mobile-like layout */
+  @media (orientation: portrait) {
+    .hero-layout {
+      @apply mt-32 items-start;
+      height: 700px; /* Fixed height */
+    }
+  }
+  
+  /* Landscape orientation (width > height) - desktop-like layout */
+  @media (orientation: landscape) {
+    .hero-layout {
+      @apply mt-16 items-center;
+      height: 650px; /* Fixed height for landscape */
+      min-height: 650px;
+    }
+  }
+}
+
+/* Desktop (large screens) - can use viewport units safely */
+@media (min-width: 1280px) {
+  .hero-layout {
+    @apply mt-20 items-center;
+    height: 100vh; /* Viewport units OK on desktop */
+  }
+}
+
 .hero-text {
-  @apply flex flex-col justify-center md:text-[60px] text-[30px] font-semibold relative z-10 pointer-events-none;
+  @apply flex flex-col justify-center text-[30px] font-semibold relative z-10 pointer-events-none;
+  
+  /* Icon container overrides - ensure square containers */
+  .slide .wrapper > span > div {
+    width: 32px !important; /* Mobile: square 32px containers */
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+  
   img {
-    @apply size-8 md:size-10 object-contain;
+    @apply size-8 object-contain;
   }
   .slide {
-    @apply absolute pt-0 px-2 md:px-5 py-[30px] h-[48px] md:h-[78px] md:translate-y-1 translate-y-0 overflow-hidden;
+    @apply absolute pt-0 px-2 py-[30px] h-[48px] translate-y-0 overflow-hidden;
+  }
+}
+
+/* Medium screens and up - larger text */
+@media (min-width: 769px) {
+  .hero-text {
+    @apply text-[60px];
+    
+    /* Icon container overrides for tablets */
+    .slide .wrapper > span > div {
+      width: 40px !important; /* Default tablet: square 40px containers */
+      height: 40px !important;
+      min-width: 40px !important;
+      min-height: 40px !important;
+    }
+    
+    img {
+      @apply size-10;
+    }
+    .slide {
+      @apply px-5 h-[78px] translate-y-1;
+    }
+  }
+  
+  /* Portrait orientation - slightly smaller text and icons */
+  @media (orientation: portrait) {
+    .hero-text {
+      @apply text-[50px];
+      
+      /* Portrait tablet: square 36px containers */
+      .slide .wrapper > span > div {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+      }
+      
+      img {
+        @apply size-9; /* Slightly smaller for portrait tablets */
+      }
+      .slide {
+        @apply h-[65px];
+      }
+    }
+  }
+  
+  /* Landscape orientation - optimal text size and icons */
+  @media (orientation: landscape) {
+    .hero-text {
+      @apply text-[52px];
+      
+      /* Landscape tablet: square 40px containers */
+      .slide .wrapper > span > div {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+      }
+      
+      img {
+        @apply size-10; /* Keep standard tablet size */
+      }
+      .slide {
+        @apply h-[68px];
+      }
+    }
+  }
+}
+
+/* Desktop - largest text and icons */
+@media (min-width: 1280px) {
+  .hero-text {
+    @apply text-[60px];
+    
+    /* Desktop: square 48px containers */
+    .slide .wrapper > span > div {
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
+      min-height: 48px !important;
+    }
+    
+    img {
+      @apply size-12; /* Larger icons for desktop */
+    }
+    .slide {
+      @apply h-[78px];
+    }
   }
 }
 
 .hero-3d-layout {
-  @apply xl:w-[70%] w-full absolute xl:-top-20 top-24 xl:-right-20 right-0;
+  @apply w-full absolute top-24 right-0;
   /* Use fixed heights instead of percentages to prevent mobile shifts */
   height: 600px; /* Fixed height for mobile */
   /* Ensure 3D container doesn't interfere with page scroll */
   pointer-events: none;
 }
 
-/* Desktop 3D layout */
+/* Mobile devices - model centered below */
+@media (max-width: 768px) {
+  .hero-3d-layout {
+    height: 450px;
+    min-height: 450px;
+  }
+}
+
+/* Tablet screens - orientation-based positioning with FIXED heights */
+@media (min-width: 769px) and (max-width: 1279px) {
+  /* Portrait orientation - mobile-like (model centered below) */
+  @media (orientation: portrait) {
+    .hero-3d-layout {
+      @apply w-full top-24 right-0;
+      height: 500px; /* Fixed height */
+      min-height: 500px;
+    }
+  }
+  
+  /* Landscape orientation - desktop-like (model on right) */
+  @media (orientation: landscape) {
+    .hero-3d-layout {
+      @apply w-[65%] -top-16 -right-16;
+      height: 580px; /* Fixed height instead of 100% */
+      min-height: 580px;
+    }
+  }
+}
+
+/* Desktop - model on right, can use percentages safely */
 @media (min-width: 1280px) {
   .hero-3d-layout {
-    height: 115%; /* Keep percentage on desktop where it's more stable */
+    @apply w-[70%] -top-20 -right-20;
+    height: 115%; /* Percentages OK on desktop */
     min-height: 50vh;
-  }
-}
-
-/* Tablet and mobile 3D layout - use fixed heights */
-@media (max-width: 1279px) {
-  .hero-3d-layout {
-    height: 500px; /* Fixed height */
-    min-height: 500px;
-  }
-}
-
-@media (max-width: 767px) {
-  .hero-3d-layout {
-    height: 450px; /* Slightly smaller on mobile */
-    min-height: 450px;
   }
 }
 
@@ -446,7 +583,27 @@ section {
   }
 }
 
+/* Tablet and larger screens - orientation-based clipping */
 @media (min-width: 769px) {
+  /* Portrait orientation - mobile-like clipping (model centered) */
+  @media (orientation: portrait) {
+    .hero-3d-layout > div {
+      overflow: hidden;
+      clip-path: inset(20% 0 11% 0);
+    }
+  }
+  
+  /* Landscape orientation - desktop-like clipping (model on right) */
+  @media (orientation: landscape) {
+    .hero-3d-layout > div {
+      overflow: hidden;
+      clip-path: inset(0 0 0 15%);
+    }
+  }
+}
+
+/* Desktop - desktop-like clipping */
+@media (min-width: 1280px) {
   .hero-3d-layout > div {
     overflow: hidden;
     clip-path: inset(0 0 0 15%);
@@ -497,10 +654,22 @@ section {
     @apply h-full flex flex-col justify-between xl:w-[60%];
 
     .image-wrapper {
-      @apply xl:h-[70vh] md:h-[50vh] h-96 relative overflow-hidden rounded-xl;
-      max-height: 70vh;
+      @apply h-96 relative overflow-hidden rounded-xl;
       transition: box-shadow 0.2s ease, transform 0.2s ease;
       will-change: box-shadow, transform;
+
+      /* Tablet fixed heights to prevent viewport shifts */
+      @media (min-width: 769px) and (max-width: 1279px) {
+        height: 350px;
+        min-height: 350px;
+        max-height: 350px;
+      }
+
+      /* Desktop can use viewport units safely */
+      @media (min-width: 1280px) {
+        height: 70vh;
+        max-height: 70vh;
+      }
 
       img {
         @apply w-full h-full object-cover absolute inset-0;
@@ -536,9 +705,28 @@ section {
     @apply flex md:flex-row flex-col xl:flex-col gap-10 xl:w-[40%];
 
     .image-wrapper {
-      @apply xl:h-[37vh] md:h-52 lg:h-72 h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0 overflow-hidden;
+      @apply h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0 overflow-hidden;
       transition: box-shadow 0.2s ease, transform 0.2s ease;
       will-change: box-shadow, transform;
+
+      /* Medium screens */
+      @media (min-width: 769px) and (max-width: 1023px) {
+        height: 200px;
+        min-height: 200px;
+        max-height: 200px;
+      }
+
+      /* Large screens but not XL */
+      @media (min-width: 1024px) and (max-width: 1279px) {
+        height: 240px;
+        min-height: 240px;
+        max-height: 240px;
+      }
+
+      /* Desktop can use viewport units safely */
+      @media (min-width: 1280px) {
+        height: 37vh;
+      }
 
       /* Simplified hover effects - lift and glow only */
       &.cursor-pointer:hover {
