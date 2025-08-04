@@ -1,9 +1,25 @@
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TitleHeader from "../components/TitleHeader"
 import { attributions } from "../constants/attributions"
 
 const AttributionsPage = () => {
+  // Instant scroll to top when component mounts
+  useEffect(() => {
+    // Temporarily disable smooth scrolling
+    const htmlElement = document.documentElement;
+    const originalScrollBehavior = htmlElement.style.scrollBehavior;
+    htmlElement.style.scrollBehavior = 'auto';
+    
+    // Force instant scroll
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    
+    // Restore smooth scrolling after component renders
+    setTimeout(() => {
+      htmlElement.style.scrollBehavior = originalScrollBehavior;
+    }, 50);
+  }, []);
+
   // Helper function to render links
   const renderLink = (item) => {
     if (Array.isArray(item) && item.length === 2) {
