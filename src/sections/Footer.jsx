@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const Footer = () => {
   // Social media links
@@ -19,6 +20,11 @@ const Footer = () => {
       icon: "/images/footer/email.png"
     }
   ];
+
+  // Detect portrait tablet viewport
+  const isPortraitTablet = useMediaQuery({ 
+    query: "(min-width: 769px) and (max-width: 1279px) and (orientation: portrait)" 
+  });
 
   // Scroll to top function
   const scrollToTop = () => {
@@ -61,7 +67,14 @@ const Footer = () => {
         {/* Right - Copyright and Back to Top */}
         <div className="flex items-center justify-center md:justify-end gap-4">
           <p className="text-center md:text-end text-white-50">
-            © {new Date().getFullYear()} Siah Jin Thau. All rights reserved.
+            {isPortraitTablet ? (
+              <>
+                © {new Date().getFullYear()} Siah Jin Thau.<br />
+                All rights reserved.
+              </>
+            ) : (
+              <>© {new Date().getFullYear()} Siah Jin Thau. All rights reserved.</>
+            )}
           </p>
           <button 
             onClick={scrollToTop}
