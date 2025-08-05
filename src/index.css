@@ -665,6 +665,13 @@ section {
         max-height: 350px;
       }
 
+      /* Portrait tablet - increase height for Psychology Blossom Chatbot image */
+      @media (min-width: 769px) and (max-width: 1279px) and (orientation: portrait) {
+        height: 720px;
+        min-height: 720px;
+        max-height: 720px;
+      }
+
       /* Desktop can use viewport units safely */
       @media (min-width: 1280px) {
         height: 70vh;
@@ -1878,6 +1885,14 @@ section {
     .socials .icon {
       width: 2rem;
       height: 2rem;
+    }
+  }
+
+  /* Portrait tablet specific adjustments */
+  @media (min-width: 769px) and (max-width: 1279px) and (orientation: portrait) {
+    .footer-container > div:last-child p {
+      line-height: 1.4;
+      word-spacing: 0.1em;
     }
   }
 }
