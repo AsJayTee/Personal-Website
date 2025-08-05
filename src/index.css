@@ -223,7 +223,7 @@ body {
   /* Landscape orientation - desktop-like (model on right) */
   @media (orientation: landscape) {
     .hero-3d-layout {
-      @apply w-[65%] -top-16 -right-16;
+      @apply w-[65%] -top-1 -right-16;  /* Shifted down from -top-16 to -top-8 */
       height: 580px; /* Fixed height instead of 100% */
       min-height: 580px;
     }
@@ -673,6 +673,13 @@ section {
         max-height: 720px;
       }
 
+      /* Landscape tablet - increase height for better proportions */
+      @media (min-width: 769px) and (max-width: 1279px) and (orientation: landscape) {
+        height: 650px;
+        min-height: 650px;
+        max-height: 650px;
+      }
+
       /* Desktop can use viewport units safely */
       @media (min-width: 1280px) {
         height: 70vh;
@@ -773,6 +780,13 @@ section {
 
 /* Portrait tablet single line layout for feature cards */
 @media (min-width: 769px) and (max-width: 1279px) and (orientation: portrait) {
+  .grid-3-cols {
+    @apply grid-cols-3 gap-4;
+  }
+}
+
+/* Landscape tablet single line layout for feature cards */
+@media (min-width: 769px) and (max-width: 1279px) and (orientation: landscape) {
   .grid-3-cols {
     @apply grid-cols-3 gap-4;
   }
@@ -1077,6 +1091,13 @@ section {
   }
 }
 
+/* Landscape tablet single line layout for tech skills cards */
+@media (min-width: 769px) and (max-width: 1279px) and (orientation: landscape) {
+  .tech-grid {
+    @apply grid-cols-5 gap-3;
+  }
+}
+
 /* Card border utility - Same as inspiration */
 .card-border {
   @apply border border-[#333333] bg-[#1a1a1a];
@@ -1111,6 +1132,34 @@ section {
 
 /* Portrait tablet optimized sizing for single line layout */
 @media (min-width: 769px) and (max-width: 1279px) and (orientation: portrait) {
+  .tech-card-content {
+    height: 260px; /* Reduced height for single line layout */
+    gap: 0.75rem;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .tech-icon-wrapper {
+    width: 7rem; /* Smaller icons for single line */
+    height: 7rem;
+  }
+  
+  .skill-text-container {
+    margin-bottom: 0.5rem;
+  }
+  
+  .tech-card-content p {
+    font-size: 0.8rem; /* Smaller text for single line */
+    line-height: 1.1;
+  }
+  
+  .second-icon-adjustment {
+    transform: translateY(2px); /* Reduced adjustment for smaller size */
+  }
+}
+
+/* Landscape tablet optimized sizing for single line layout */
+@media (min-width: 769px) and (max-width: 1279px) and (orientation: landscape) {
   .tech-card-content {
     height: 260px; /* Reduced height for single line layout */
     gap: 0.75rem;
