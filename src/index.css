@@ -213,7 +213,8 @@ body {
   /* Portrait orientation - mobile-like (model centered below) */
   @media (orientation: portrait) {
     .hero-3d-layout {
-      @apply w-full top-24 right-0;
+      @apply w-full right-0;
+      top: 15rem; 
       height: 500px; /* Fixed height */
       min-height: 500px;
     }
