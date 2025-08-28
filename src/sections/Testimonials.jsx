@@ -29,6 +29,7 @@ const Testimonials = () => {
         duration: 0.8,
         stagger: 0.15,
         ease: "power2.out",
+        force3D: true,  // GPU ACCELERATION OPTIMIZATION
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top bottom-=100",

@@ -198,6 +198,10 @@ body {
   height: 600px; /* Fixed height for mobile */
   /* Ensure 3D container doesn't interfere with page scroll */
   pointer-events: none;
+  /* GPU ACCELERATION OPTIMIZATIONS */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  contain: layout style paint;
 }
 
 /* Mobile devices - model centered below */
@@ -239,9 +243,17 @@ body {
   }
 }
 
-/* Enable pointer events only on the canvas child */
+/* GPU ACCELERATION FOR 3D CONTAINER CHILDREN */
 .hero-3d-layout > div {
   pointer-events: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* GPU ACCELERATION FOR CANVAS */
+.hero-3d-layout canvas {
+  transform: translateZ(0);
+  will-change: contents;
 }
 
 /* Smooth transitions for interactive elements */
@@ -306,6 +318,10 @@ body {
   transition: all 0.3s ease-in-out;
   pointer-events: auto;
   overflow: visible;
+  /* GPU ACCELERATION OPTIMIZATIONS */
+  transform: translateX(-50%) translateZ(0);
+  will-change: background-color, backdrop-filter;
+  contain: layout style;
 }
 
 @media (min-width: 768px) {
@@ -879,6 +895,9 @@ section {
     rgba(23, 23, 32, 0) 100%
   );
   transform-origin: top;
+  /* GPU ACCELERATION OPTIMIZATIONS */
+  transform: translateZ(0);
+  will-change: transform, background;
 }
 
 .timeline-node {
@@ -894,6 +913,10 @@ section {
               box-shadow 0.5s ease-out;
   will-change: transform, opacity;
   top: 0; /* Will be dynamically positioned */
+  /* GPU ACCELERATION OPTIMIZATIONS */
+  transform: translateX(-50%) translateZ(0);
+  will-change: transform, opacity, box-shadow;
+  contain: layout style;
 }
 
 .timeline-node[data-visible="false"] {
@@ -941,6 +964,10 @@ section {
   transition: transform 0.5s ease-out, 
               opacity 0.5s ease-out;
   will-change: transform, opacity;
+  /* GPU ACCELERATION OPTIMIZATIONS */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  contain: layout style paint;
 }
 
 .experience-card[data-visible="false"] {

@@ -33,13 +33,15 @@ const TitleHeader = ({ title, sub }) => {
       opacity: 1,
       y: 0,
       duration: 0.6,
-      ease: "power2.out"
+      ease: "power2.out",
+      force3D: true  // GPU ACCELERATION OPTIMIZATION
     })
     .to(titleRef.current, {
       opacity: 1,
       y: 0,
       duration: 0.8,
-      ease: "power2.out"
+      ease: "power2.out",
+      force3D: true  // GPU ACCELERATION OPTIMIZATION
     }, "-=0.3"); // Start 0.3 seconds before the previous animation ends
 
   }, []);

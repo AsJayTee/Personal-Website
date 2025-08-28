@@ -173,7 +173,8 @@ const ExperienceSection = () => {
         gsap.to(timelineLineRef.current, {
           scaleY: progress,
           duration: 0.1,
-          ease: "none"
+          ease: "none",
+          force3D: true  // GPU ACCELERATION OPTIMIZATION
         });
 
         let currentColor = experiences[0].themeColor;

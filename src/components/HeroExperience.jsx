@@ -192,10 +192,14 @@ const HeroExperience = () => {
             gl={{ 
               antialias: true,
               alpha: true,
-              preserveDrawingBuffer: true,
-              powerPreference: "high-performance"
+              powerPreference: "high-performance",
+              stencil: false,
+              depth: true,
+              logarithmicDepthBuffer: false,
+              precision: "highp"
             }}
-            dpr={[1, 2]}
+            dpr={[1, Math.min(window.devicePixelRatio, 2)]}
+            performance={{ min: 0.5 }}
           >
             <LoadingManager />
             

@@ -55,6 +55,7 @@ useGSAP(() => {
               opacity: 1, 
               duration: 1, 
               delay: 0.3,
+              force3D: true,  // GPU ACCELERATION OPTIMIZATION
               scrollTrigger: {
                 trigger: card,
                 start: "top bottom-=100",
@@ -72,7 +73,8 @@ useGSAP(() => {
                         y: 0, 
                         opacity: 1, 
                         duration: 1, 
-                        delay: 0.3 * (otherIndex + 2) // Staggered delay
+                        delay: 0.3 * (otherIndex + 2), // Staggered delay
+                        force3D: true  // GPU ACCELERATION OPTIMIZATION
                       }
                     );
                   });
@@ -97,6 +99,7 @@ useGSAP(() => {
             opacity: 1, 
             duration: 1, 
             delay: 0.3 * (index + 1),
+            force3D: true,  // GPU ACCELERATION OPTIMIZATION
             scrollTrigger: {
               trigger: card,
               start: "top bottom-=30",
@@ -110,7 +113,11 @@ useGSAP(() => {
     gsap.fromTo(
       sectionRef.current, 
       { opacity : 0 }, 
-      { opacity : 1, duration : 1.5 }
+      { 
+        opacity : 1, 
+        duration : 1.5,
+        force3D: true  // GPU ACCELERATION OPTIMIZATION
+      }
     );
   }, []);
 
