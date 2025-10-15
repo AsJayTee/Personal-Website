@@ -116,6 +116,14 @@ export const techStackImgs = [
       {
         skillName: "Anthropic",
         imagePath: "images/skills/ai/anthropic.png"
+      },
+      {
+        skillName: "ElevenLabs",
+        imagePath: "images/skills/ai/elevenlabs.png"
+      },
+      {
+        skillName: "LM Studio",
+        imagePath: "images/skills/ai/lmstudio.png"
       }
     ]
   },
