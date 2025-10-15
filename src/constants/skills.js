@@ -242,6 +242,18 @@ export const techStackImgs = [
       {
         skillName: "Hostinger",
         imagePath: "/images/skills/cloud/hostinger.png"
+      },
+      {
+        skillName: "Vercel",
+        imagePath: "/images/skills/cloud/vercel.png"
+      },
+      {
+        skillName: "Lambda",
+        imagePath: "/images/skills/cloud/lambda.png"
+      },
+      {
+        skillName: "Spaceship",
+        imagePath: "/images/skills/cloud/spaceship.png"
       }
     ]
   }
