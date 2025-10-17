@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/Built%20with-React-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org)
 [![Three.js](https://img.shields.io/badge/3D%20Graphics-Three.js-000000?style=for-the-badge&logo=three.js)](https://threejs.org)
 
-> **A modern, interactive portfolio website showcasing my journey in Data Science and Compputer Science**
+> **A modern, interactive portfolio website showcasing my journey in Data Science and Computer Science**
 
 🌐 **Live Website:** [jinthau.com](https://jinthau.com)
 
