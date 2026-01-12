@@ -78,6 +78,10 @@ export const techStackImgs = [
         imagePath: "images/skills/ai/colab.png"
       },
       {
+        skillName: "Deepnote",
+        imagePath: "images/skills/ai/deepnote.png"
+      },
+      {
         skillName: "scikit-learn",
         imagePath: "images/skills/ai/scikit-learn.png"
       },
