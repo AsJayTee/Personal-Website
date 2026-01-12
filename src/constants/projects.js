@@ -1,6 +1,32 @@
 export const projects = [
   {
     id: 1,
+    title: "Medical Q&A: Reward Model Overconfidence Penalization",
+    image: "/images/showcase/medqa.png",
+    description: "A research project developing reward models for medical question-answering that incorporate overconfidence penalization. Addresses the fundamental misalignment in RLHF where models are incentivized to guess confidently rather than express appropriate uncertainty. Implements risk-stratified confidence penalties and evaluates their impact on reward model calibration using the TREC-2017 LiveQA medical dataset.",
+    technologies: [
+      "Python",
+      "PyTorch",
+      "Transformers (LLaMA-3.2-3B-Instruct)",
+      "NumPy",
+      "Pandas",
+      "Matplotlib",
+      "XML Parsing",
+      "AdamW Optimizer",
+      "Mixed Precision Training"
+    ],
+    features: [
+      "Risk-stratified reward modeling with confidence-aware penalties",
+      "Bradley-Terry pairwise ranking loss with weighted confidence penalties",
+      "Rule-based confidence estimation using linguistic markers and medical terminology",
+      "Expected Calibration Error (ECE) and pairwise accuracy evaluation",
+      "Parameter-efficient training (3K trainable params on frozen LLaMA backbone)",
+      "Safety-oriented metrics: high-confidence error rates by risk level"
+    ],
+    githubUrl: "https://github.com/AsJayTee/MedQA-Reward-Overconfidence"
+  },
+  {
+    id: 2,
     title: "Psychology Blossom Chatbot",
     image: "/images/showcase/pb_chatbot.png",
     description: "An intelligent RAG-based chatbot built for Psychology Blossom, a Singapore-based counselling service. Designed to provide 24/7 client support, intelligent therapist matching, and scalable infrastructure for mental health services.",
@@ -19,59 +45,44 @@ export const projects = [
       "Multi-language support capabilities",
       "Seamless handoff to human agents when needed",
       "Secure, cloud-based architecture using GCP",
-      "Seamless handoff to human agents when needed",
       "Custom-built RAG system for optimized Q&A",
       "Reliable tool-calling framework with minimal LLM dependency",
-      "Fuzzy matching and persistent preference memory",
+      "Fuzzy matching and persistent preference memory"
     ],
     liveUrl: "https://psychologyblossom.com/",
     githubUrl: "https://github.com/AsJayTee/PB-Chatbot"
   },
   {
-    id: 2,
-    title: "Interactive 3D AI Avatars",
-    image: "/images/showcase/3d_ai_avatar.png",
-    description: "An innovative project exploring the intersection of 3D graphics and Generative AI. Features lifelike avatars that can interact naturally with users through real-time animation technologies.",
-    technologies: [
-      "Three.js",
-      "React",
-      "Blender",
-      "Web Speech API",
-      "JavaScript",
-      "HTML",
-    ],
-    features: [
-      "Real-time facial expression mapping",
-      "Voice-driven lip synchronization",
-      "Gesture recognition and response",
-      "Customizable avatar appearances",
-      "Cross-platform compatibility",
-      "Low-latency interaction system",
-      "AI-powered conversation capabilities"
-    ]
-  },
-  {
     id: 3,
-    title: "Fraud Detection in Electricity and Gas Consumption",
-    image: "/images/showcase/fraud_analysis.png",
-    description: "A comprehensive machine learning solution for detecting fraudulent activities in utility consumption patterns. Utilizes advanced statistical analysis and ensemble learning methods to identify anomalies and prevent revenue loss for utility companies.",
+    title: "TetrahouseTV Company Website",
+    image: "/images/showcase/tetrahouse.png",
+    description: "A full-service creative agency website for TetrahouseTV, specializing in film and content production. Features immersive video-heavy portfolio showcases, smooth scroll-triggered animations, and professional project presentations for commercial, documentary, music video, and social media content.",
     technologies: [
-      "Python",
-      "Scikit-learn",
-      "Pandas",
-      "NumPy",
-      "Matplotlib",
-      "Seaborn",
-      "XGBoost",
-      "Random Forest"
+      "React",
+      "Vite",
+      "GSAP",
+      "TailwindCSS",
+      "React Router",
+      "EmailJS",
+      "React Icons",
+      "Vercel",
+      "Google Cloud Storage"
     ],
     features: [
-      "Advanced anomaly detection algorithms",
-      "Historical pattern analysis",
-      "ROC curve optimization for accuracy",
-      "Ensemble model implementation",
-      "Performance metrics tracking"
+      "Video-heavy portfolio showcase with custom video players",
+      "Smooth scroll-triggered animations using GSAP & ScrollTrigger",
+      "Fully responsive design optimized for all devices",
+      "Interactive services section with hover animations",
+      "Animated project detail pages with template system",
+      "Contact form with EmailJS integration",
+      "Release form with Google Sheets backend integration",
+      "Immersive about page with storytelling sections",
+      "Optimized performance with lazy loading and code splitting",
+      "Custom typography with web fonts (OverusedGrotesk, HelveticaNeue)",
+      "Social media integration (Instagram, LinkedIn)",
+      "Video backgrounds with performance optimization"
     ],
-    githubUrl: "https://github.com/AsJayTee/IT1244-Fraud-Analysis"
+    liveUrl: "https://tetrahouse.tv/",
+    githubUrl: null
   }
 ];

@@ -127,13 +127,12 @@ useGSAP(() => {
       <section className="app-showcase" ref={sectionRef}>
         <div className="w-full">
           <div className="showcaselayout">
-            {/* LEFT */}
+            {/* LEFT - Main Project (MedQA - Research, no label) */}
             <div className="first-project-wrapper" ref={project1Ref}>
               <div 
                 className="image-wrapper cursor-pointer"
                 onClick={() => handleProjectClick(projects[0])}
               >
-                <FancyLabel text="Professional Collaboration" position="top-right" />
                 <img 
                   src={projects[0].image} 
                   alt={projects[0].title}
@@ -144,19 +143,11 @@ useGSAP(() => {
                   {projects[0].title}
                 </h2>
                 <p className="text-white-50 md:text-xl">
-                  A full-stack project powered by JavaScript, Python, and Google Cloud, 
-                  designed for fast and seamless user engagement.
-                  {projects[0].liveUrl && (
-                    <>
-                      {" "}Check it out here: {" "}
-                      <a href={projects[0].liveUrl} className="underline decoration-[1px] hover:text-white">
-                        Live Chatbot
-                      </a>
-                    </>
-                  )}
+                  A research project analyzing reward model overconfidence in medical AI systems, 
+                  focusing on uncertainty quantification for safer clinical decision-making.
                   {projects[0].githubUrl && (
                     <>
-                      {" "} | {" "}
+                      {" "}Check it out: {" "}
                       <a href={projects[0].githubUrl} className="underline decoration-[1px] hover:text-white">
                         GitHub Repo
                       </a>
@@ -165,12 +156,16 @@ useGSAP(() => {
                 </p>
               </div>
             </div>
+            
+            {/* RIGHT - Professional Collaboration Projects */}
             <div className="project-list-wrapper">
+              {/* Project 2 - Psychology Blossom Chatbot */}
               <div className="project" ref={project2Ref}>
                 <div 
-                  className="image-wrapper bg-[#dbffdc] cursor-pointer"
+                  className="image-wrapper bg-[#c1fbff] cursor-pointer"
                   onClick={() => handleProjectClick(projects[1])}
                 >
+                  <FancyLabel text="Professional Collaboration" position="top-right" />
                   <img 
                     src={projects[1].image} 
                     alt={projects[1].title}
@@ -180,11 +175,14 @@ useGSAP(() => {
                   {projects[1].title}
                 </h2>
               </div>
+              
+              {/* Project 3 - Portfolio Website */}
               <div className="project" ref={project3Ref}>
                 <div 
-                  className="image-wrapper bg-[#e7e7ff] cursor-pointer"
+                  className="image-wrapper bg-[#000000] cursor-pointer"
                   onClick={() => handleProjectClick(projects[2])}
                 >
+                  <FancyLabel text="Professional Collaboration" position="top-right" />
                   <img 
                     src={projects[2].image} 
                     alt={projects[2].title}
