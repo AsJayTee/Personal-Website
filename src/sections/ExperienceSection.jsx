@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -16,7 +16,12 @@ const ExperienceSection = () => {
   const experienceRefs = useRef([]);
   const nodeRefs = useRef([]);
   const cardRefs = useRef([]);
-  const [nodePositions, setNodePositions] = useState([]);
+  
+  // Track which nodes have been revealed (permanent visibility)
+  const revealedNodes = useRef(new Set());
+  
+  // Track maximum scroll progress (high water mark)
+  const maxProgressRef = useRef(0);
   
   // Modal state management
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,6 +29,14 @@ const ExperienceSection = () => {
   
   // Mobile detection
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
+  // Pre-compute the gradient CSS string once
+  const gradientColors = useMemo(() => {
+    return experiences.map((exp, index) => {
+      const position = (index / (experiences.length - 1)) * 100;
+      return `${exp.themeColor} ${position}%`;
+    }).join(', ');
+  }, []);
 
   // Modal handlers
   const handleExperienceClick = (experience) => {
@@ -38,63 +51,48 @@ const ExperienceSection = () => {
     setSelectedExperience(null);
   };
 
-  // Set CSS custom properties for theming
+  // Set CSS custom properties for theming - ONCE on mount
   useEffect(() => {
     const root = document.documentElement;
     experiences.forEach((exp, index) => {
       root.style.setProperty(`--theme-primary-${index}`, exp.themeColor);
       root.style.setProperty(`--theme-secondary-${index}`, exp.secondaryColor);
     });
-  }, []);
+    root.style.setProperty('--timeline-gradient', gradientColors);
+  }, [gradientColors]);
 
-  // Calculate and cache node positions
+  // Calculate and set node positions
   useEffect(() => {
-    const calculateNodePositions = () => {
-      const positions = [];
+    const positionNodes = () => {
       experiences.forEach((_, index) => {
         const cardEl = cardRefs.current[index];
         const experienceEl = experienceRefs.current[index];
+        const nodeEl = nodeRefs.current[index];
         
-        if (cardEl && experienceEl) {
-          const experienceOffsetTop = experienceEl.offsetTop;
-          const cardOffsetTop = cardEl.offsetTop;
-          const totalOffset = experienceOffsetTop + cardOffsetTop + 10;
-          positions.push(totalOffset);
+        if (cardEl && experienceEl && nodeEl) {
+          const totalOffset = experienceEl.offsetTop + cardEl.offsetTop + 10;
+          nodeEl.style.top = `${totalOffset}px`;
         }
       });
-      setNodePositions(positions);
     };
 
-    // Initial calculation after DOM is ready
-    const timer = setTimeout(calculateNodePositions, 100);
+    requestAnimationFrame(positionNodes);
 
-    // Recalculate on resize with debounce
-    let resizeTimer;
+    let resizeTimeout;
     const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(calculateNodePositions, 150);
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(positionNodes, 150);
     };
     
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     
     return () => {
-      clearTimeout(timer);
-      clearTimeout(resizeTimer);
+      clearTimeout(resizeTimeout);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  // Position nodes based on cached positions
-  useEffect(() => {
-    nodePositions.forEach((position, index) => {
-      const nodeEl = nodeRefs.current[index];
-      if (nodeEl) {
-        nodeEl.style.top = `${position}px`;
-      }
-    });
-  }, [nodePositions]);
-
-  // Set up Intersection Observers for immediate visual feedback
+  // Intersection Observer - nodes stay visible permanently once revealed
   useEffect(() => {
     const observerOptions = {
       root: null,
@@ -105,24 +103,27 @@ const ExperienceSection = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const index = experienceRefs.current.findIndex(ref => ref === entry.target);
-        if (index !== -1) {
-          const node = nodeRefs.current[index];
+        if (index === -1) return;
+        
+        const node = nodeRefs.current[index];
+        
+        if (entry.isIntersecting) {
+          revealedNodes.current.add(index);
           
-          if (entry.isIntersecting) {
+          requestAnimationFrame(() => {
             entry.target.setAttribute('data-visible', 'true');
             if (node) {
               node.setAttribute('data-visible', 'true');
-              setTimeout(() => {
-                node.style.boxShadow = `0 0 30px ${experiences[index].themeColor}, 0 0 60px ${experiences[index].themeColor}40`;
-              }, 300);
             }
-          } else {
+          });
+        } else if (!revealedNodes.current.has(index)) {
+          // Only hide if never revealed before
+          requestAnimationFrame(() => {
             entry.target.setAttribute('data-visible', 'false');
             if (node) {
               node.setAttribute('data-visible', 'false');
-              node.style.boxShadow = `0 0 20px ${experiences[index].themeColor}`;
             }
-          }
+          });
         }
       });
     }, observerOptions);
@@ -134,89 +135,33 @@ const ExperienceSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Timeline animation with optimized color interpolation
+  // Optimized timeline animation - only updates on forward progress
   useGSAP(() => {
-    const interpolateColor = (color1, color2, factor) => {
-      const hexToRgb = (hex) => {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16)
-        } : null;
-      };
+    if (!timelineLineRef.current || !sectionRef.current) return;
 
-      const c1 = hexToRgb(color1);
-      const c2 = hexToRgb(color2);
-      const result = {
-        r: Math.round(c1.r + factor * (c2.r - c1.r)),
-        g: Math.round(c1.g + factor * (c2.g - c1.g)),
-        b: Math.round(c1.b + factor * (c2.b - c1.b))
-      };
-      return `rgb(${result.r}, ${result.g}, ${result.b})`;
-    };
-
-    const colorStops = experiences.map((exp, index) => ({
-      position: index / (experiences.length - 1),
-      color: exp.themeColor,
-      secondary: exp.secondaryColor
-    }));
-
-    ScrollTrigger.create({
+    const setProgress = gsap.quickSetter(timelineLineRef.current, '--scroll-progress');
+    
+    const trigger = ScrollTrigger.create({
       trigger: sectionRef.current,
-      start: "top center",
-      end: "bottom center",
-      scrub: 1,
+      start: 'top center',
+      end: 'bottom center',
+      scrub: 0.5,
       onUpdate: (self) => {
-        const progress = self.progress;
+        const currentProgress = self.progress;
         
-        gsap.to(timelineLineRef.current, {
-          scaleY: progress,
-          duration: 0.1,
-          ease: "none",
-          force3D: true  // GPU ACCELERATION OPTIMIZATION
-        });
-
-        let currentColor = experiences[0].themeColor;
-        
-        for (let i = 0; i < colorStops.length - 1; i++) {
-          const start = colorStops[i].position;
-          const end = colorStops[i + 1].position;
-          
-          if (progress >= start && progress <= end) {
-            const segmentProgress = (progress - start) / (end - start);
-            currentColor = interpolateColor(
-              colorStops[i].color,
-              colorStops[i + 1].color,
-              segmentProgress
-            );
-            break;
-          }
+        // Only update if we've scrolled further than before
+        if (currentProgress > maxProgressRef.current) {
+          maxProgressRef.current = currentProgress;
+          setProgress(currentProgress);
         }
-
-        const gradientStop = Math.max(20, Math.min(80, progress * 100));
-        const gradient = `linear-gradient(
-          0deg,
-          rgba(23, 23, 32, 0) 0%,
-          ${currentColor} ${gradientStop}%,
-          ${currentColor} ${Math.min(100, gradientStop + 20)}%,
-          rgba(23, 23, 32, 0) 100%
-        )`;
-
-        timelineLineRef.current.style.background = gradient;
+        // On scroll-up: do nothing - timeline stays at max
       }
     });
 
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === sectionRef.current) {
-          trigger.kill();
-        }
-      });
-    };
+    return () => trigger.kill();
   }, []);
 
-  // Render simplified mobile card
+  // Render mobile card
   const renderMobileCard = (exp, index) => (
     <div
       ref={el => cardRefs.current[index] = el}
@@ -227,7 +172,6 @@ const ExperienceSection = () => {
         '--theme-secondary': exp.secondaryColor
       }}
     >
-      {/* Company Badge */}
       <div 
         className="company-badge-mobile"
         style={{
@@ -236,14 +180,8 @@ const ExperienceSection = () => {
       >
         {exp.companyName}
       </div>
-      
-      {/* Role Title */}
       <h3 className="role-title-mobile">{exp.title}</h3>
-      
-      {/* Date */}
       <p className="date-mobile">📅 {exp.date}</p>
-      
-      {/* Show More Indicator */}
       <div className="show-more-indicator">
         <span>Tap for details</span>
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -253,7 +191,7 @@ const ExperienceSection = () => {
     </div>
   );
 
-  // Render full desktop card
+  // Render desktop card
   const renderDesktopCard = (exp, index) => (
     <div 
       ref={el => cardRefs.current[index] = el}
@@ -263,7 +201,6 @@ const ExperienceSection = () => {
         '--theme-secondary': exp.secondaryColor
       }}
     >
-      {/* Header */}
       <div className="experience-header">
         <div>
           <div className="company-badge mb-4">
@@ -274,7 +211,6 @@ const ExperienceSection = () => {
         </div>
       </div>
 
-      {/* Responsibilities */}
       <div className="responsibilities-section">
         <h4 className="responsibilities-title">Key Responsibilities</h4>
         <ul className="responsibilities-list">
@@ -287,7 +223,6 @@ const ExperienceSection = () => {
         </ul>
       </div>
 
-      {/* Achievements */}
       {exp.achievements && exp.achievements.length > 0 && (
         <div className="achievements-section">
           <h4 className="achievements-title">Key Achievements</h4>
@@ -331,8 +266,8 @@ const ExperienceSection = () => {
           <div ref={timelineRef} className="timeline-wrapper">
             <div 
               ref={timelineLineRef}
-              className="timeline-line"
-              style={{ transform: 'scaleY(0)', transformOrigin: 'top center' }}
+              className="timeline-line-optimized"
+              style={{ '--scroll-progress': 0 }}
             />
             
             {/* Timeline Nodes */}
@@ -342,15 +277,13 @@ const ExperienceSection = () => {
                 ref={el => nodeRefs.current[index] = el}
                 className="timeline-node"
                 data-visible="false"
-                style={{
-                  '--node-color': exp.themeColor,
-                  boxShadow: `0 0 20px ${exp.themeColor}`
-                }}
+                style={{ '--node-color': exp.themeColor }}
               >
                 <img 
                   src={exp.logoPath} 
                   alt={exp.companyName}
                   className="rounded-full"
+                  loading="lazy"
                 />
               </div>
             ))}
@@ -364,9 +297,7 @@ const ExperienceSection = () => {
                 ref={el => experienceRefs.current[index] = el}
                 className="experience-card"
                 data-visible="false"
-                style={{
-                  marginTop: index === 0 ? '0' : '8rem'
-                }}
+                style={{ marginTop: index === 0 ? '0' : '8rem' }}
               >
                 {isMobile ? renderMobileCard(exp, index) : renderDesktopCard(exp, index)}
               </div>
@@ -375,7 +306,6 @@ const ExperienceSection = () => {
         </div>
       </div>
 
-      {/* Experience Modal for Mobile */}
       <ExperienceModal 
         isOpen={isModalOpen}
         onClose={handleCloseModal}
